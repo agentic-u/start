@@ -12,4 +12,4 @@ This is an early Mac-first release under test. The setup includes local Git, Cod
 
 Nothing in this session sends messages, spends money or publishes the person's business files. This repository is public; their business folder is separate and has no remote unless they explicitly choose one.
 
-[What gets set up](SETUP.md) · [The session](BOOTSTRAP.md) · [Design and source pins](DESIGN.md)
+[What gets set up](SETUP.md) · [The session](BOOTSTRAP.md) · [Test evidence](EVIDENCE.md) · [Design and source pins](DESIGN.md)
