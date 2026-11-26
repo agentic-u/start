@@ -33,13 +33,14 @@ class Checkpoint:
 
 
 def admit_event(raw):
-    match raw:
-        case {"kind": "answer", "text": str(text)} if text.strip():
-            return Answer(text)
-        case {"kind": "checkpoint", "phase": str(phase), "question": str(question)} if phase in PHASES:
-            return Checkpoint(phase, question)
-        case _:
-            raise ValueError("Invalid journal event; preserve the file and inspect it")
+    if not isinstance(raw, dict):
+        raise ValueError("Journal event must be an object")
+    if raw.get("kind") == "answer" and isinstance(raw.get("text"), str) and raw["text"].strip():
+        return Answer(raw["text"])
+    if (raw.get("kind") == "checkpoint" and raw.get("phase") in PHASES
+            and isinstance(raw.get("question"), str)):
+        return Checkpoint(raw["phase"], raw["question"])
+    raise ValueError("Invalid journal event; preserve the file and inspect it")
 
 
 def atomic_write(path, text):
@@ -66,11 +67,10 @@ def rebuild(root):
     checkpoint = Checkpoint("listening", "Tell me about the business.")
     for line in (root / ".agenticu/events.jsonl").read_text().splitlines():
         event = admit_event(json.loads(line))
-        match event:
-            case Answer(text):
-                answers.append(text)
-            case Checkpoint():
-                checkpoint = event
+        if isinstance(event, Answer):
+            answers.append(event.text)
+        else:
+            checkpoint = event
     state = {"phase": checkpoint.phase, "pending_question": checkpoint.question,
              "owner_answer_count": len(answers), "business": metadata["name"],
              "bootstrap_revision": metadata["bootstrap_revision"]}
@@ -172,16 +172,15 @@ def main():
         result = initialize(args.name, args.parent)
     else:
         root = args.root.expanduser().resolve()
-        match args.command:
-            case "status":
-                with locked(root):
-                    result = rebuild(root)
-            case "answer":
-                result = record(root, {"kind": "answer", "text": args.file.read_text().rstrip("\n")})
-            case "checkpoint":
-                result = record(root, {"kind": "checkpoint", "phase": args.phase, "question": args.question})
-            case "handoff":
-                result = handoff(root)
+        if args.command == "status":
+            with locked(root):
+                result = rebuild(root)
+        elif args.command == "answer":
+            result = record(root, {"kind": "answer", "text": args.file.read_text().rstrip("\n")})
+        elif args.command == "checkpoint":
+            result = record(root, {"kind": "checkpoint", "phase": args.phase, "question": args.question})
+        elif args.command == "handoff":
+            result = handoff(root)
     print(json.dumps(result, indent=2))
 
 
