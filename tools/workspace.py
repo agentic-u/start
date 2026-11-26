@@ -37,7 +37,7 @@ def admit_event(raw):
         raise ValueError("Journal event must be an object")
     if raw.get("kind") == "answer" and isinstance(raw.get("text"), str) and raw["text"].strip():
         return Answer(raw["text"])
-    if (raw.get("kind") == "checkpoint" and raw.get("phase") in PHASES
+    if (raw.get("kind") == "checkpoint" and isinstance(raw.get("phase"), str) and raw["phase"] in PHASES
             and isinstance(raw.get("question"), str)):
         return Checkpoint(raw["phase"], raw["question"])
     raise ValueError("Invalid journal event; preserve the file and inspect it")
@@ -65,15 +65,18 @@ def rebuild(root):
         raise ValueError("Unsupported workspace format")
     answers = []
     checkpoint = Checkpoint("listening", "Tell me about the business.")
+    pending = {"kind": "awaiting", "question": checkpoint.question}
     for line in (root / ".agenticu/events.jsonl").read_text().splitlines():
         event = admit_event(json.loads(line))
         if isinstance(event, Answer):
             answers.append(event.text)
+            pending = {"kind": "answered", "question": checkpoint.question, "answer": event.text}
         else:
             checkpoint = event
+            pending = {"kind": "awaiting", "question": checkpoint.question}
     state = {"phase": checkpoint.phase, "pending_question": checkpoint.question,
              "owner_answer_count": len(answers), "business": metadata["name"],
-             "bootstrap_revision": metadata["bootstrap_revision"]}
+             "bootstrap_revision": metadata["bootstrap_revision"], "pending": pending}
     atomic_write(root / "sources/said.md", "\n\n".join(answers) + ("\n" if answers else ""))
     atomic_write(root / ".agenticu/checkpoint.json", json.dumps(state, indent=2) + "\n")
     return state
@@ -185,4 +188,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (ValueError, OSError, subprocess.CalledProcessError) as error:
+        print(json.dumps({"status": "failed", "reason": str(error),
+                          "next": "Preserve the existing files. Inspect the named failure before retrying; do not reinitialize or reset the folder."}), file=sys.stderr)
+        raise SystemExit(1) from error

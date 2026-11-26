@@ -58,6 +58,12 @@ class WorkspaceTest(unittest.TestCase):
             workspace.record(root, {"kind": "answer", "text": "new answer"})
         self.assertEqual(journal.read_text(), '{"kind":"invented"}\n')
 
+    def test_answer_saved_before_next_checkpoint_is_not_an_unanswered_question(self):
+        root = Path(workspace.initialize("Test Business", self.parent)["root"])
+        workspace.record(root, {"kind": "checkpoint", "phase": "listening", "question": "Tell your story"})
+        state = workspace.record(root, {"kind": "answer", "text": "already told you"})
+        self.assertEqual(state["pending"], {"kind": "answered", "question": "Tell your story", "answer": "already told you"})
+
 
 if __name__ == "__main__":
     unittest.main()
