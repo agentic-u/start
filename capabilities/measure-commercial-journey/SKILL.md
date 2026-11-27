@@ -3,7 +3,7 @@ name: measure-commercial-journey
 description: Fit and prove tracking for a commercial journey across pages, campaigns, booking or checkout, fulfilment and business outcomes. Use when asked to instrument a funnel, reconcile attribution, or diagnose commercial measurement.
 compatibility: A file-capable agent using existing authorised browser, HTTP, deployment and provider interfaces. No AgenticU CLI or particular analytics vendor is required.
 metadata:
-  revision: "draft-1"
+  revision: "draft-2"
 ---
 
 # Measure the actual commercial journey
@@ -33,6 +33,10 @@ Start with configuration readback, actual navigation, resource requests and clea
 Test relevant duplicate/replay behavior and an excluded or cancelled/refunded occurrence, without manufacturing real commerce. A reloaded thank-you page must not create another sale. Missing identity or an unknown event must remain visible, not silently become an attributed purchase. Browser/server projections must not double count one occurrence. Preserve the original records before any correction.
 
 Report evidence and clocks for each source. Reconcile spend, qualified leads/bookings/orders, merchant money and fulfilment at their native grains. Do not join records only because amounts or timestamps look close. A warehouse projection is not a new order ledger. An invoice is not payment; expected value is not observed money.
+
+Inspect destination query freshness as well as ingestion: retain its calculation clock, cache status and source snapshot. A successful query may return an older cached answer. Use the provider's documented refresh operation when a fresh reconciliation needs it; do not diagnose missing events by comparing different clocks.
+
+Exercise a retry after collector acceptance, retaining the same occurrence identity and original timestamp. Read the actual destination contract: some providers merge duplicates eventually, so fresh raw rows or default insight counts can temporarily include multiple copies. Distinguish canonical business occurrences, accepted projections and query-visible copies. For operational decisions, reconcile native occurrences or use an explicitly tested query at the provider's complete deduplication grain; do not quietly present raw copies as unique leads, orders or revenue. Keep the transient duplicate and later merge observations as evidence rather than repairing history or assuming immediate exactly-once delivery.
 
 ## Interpret and continue
 
