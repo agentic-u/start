@@ -26,6 +26,10 @@ Counterread the target alone for selling force and against its original source/s
 
 ## Build the whole journey
 
+Existing executable components are available through [the implementation path](implementation.md).
+Inspect that path before rebuilding equivalent plumbing. Acquire only when its
+supported shape fits the job; methods remain usable with other authorized tools.
+
 Choose the implementation from the job and local fitting, not a mandatory framework. Build the appropriate destination and fulfilment, then connect the public path: page/creative → action → intake/qualification → booking/checkout or equivalent → confirmation → useful delivery → follow-up/review. Avoid an empty lead form whose submissions go nowhere. Persist actual records and give staff a usable return path. Respect consent and communication authority; a local spool is not an external send.
 
 Compose [measure-commercial-journey](../measure-commercial-journey/SKILL.md) while building, before traffic. Keep the same offer, audience, identity and event meaning coherent across components. Fit required hosting, domain, forms/storage, scheduling/payment/delivery and analytics through the capability lock. State actual missing means and continue useful work; ask for owner-only setup only when available authorised access cannot resolve it. Never copy sign-in state or reset the owner's environment.

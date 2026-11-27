@@ -1,5 +1,11 @@
 # Contract and implementation
 
+The [implementation connection](docs/implementation-connection.md) connects selected
+repository methods to pinned consumable Spellbook code. IMPLEMENTATIONS.md owns
+the recipient route; implementations.json owns the archive selection. This reuses
+existing code without making the optional AU runtime a dependency. EVIDENCE.md
+records actual independent consumer results and remaining provider qualification.
+
 The caller gives a signed-in agent the repository URL and either asks for setup or describes current business work. BOOTSTRAP.md routes the actual request: resume existing work, use a repository capability, or prepare a new workspace. Existing business work does not require a new folder, onboarding manifest or repeated interview. For new setup the agent owns preparation and handoff; the person never needs to name a path or operate a terminal. The existing sourced-picture/first-action/checkpoint session remains the new-workspace path.
 
 The recipient worlds start without assuming any prior AgenticU onboarding. The business exists; relevant tools/access may or may not already work. A running file-capable agent is the lab floor, not proof that the business is connected or fitted. The selected capability drives inspection and progressive setup; the agent does not require a general initiation before helping with the requested job. Fictional-business runs now exercise this arrival path, fresh-agent continuation, missing mailbox access and one actual scheduled resumption; EVIDENCE.md keeps the tested revisions, remaining task-maintenance gap and limits explicit.

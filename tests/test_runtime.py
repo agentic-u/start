@@ -122,6 +122,18 @@ class RuntimeTests(unittest.TestCase):
             with self.assertRaises(runtime.InstallError):
                 runtime.node_platform()
 
+    def test_existing_version_manager_shim_uses_actual_node_directory(self):
+        binaries = self.root / "actual-bin"
+        binaries.mkdir()
+        node, npm = binaries / "node", binaries / "npm"
+        node.touch()
+        npm.touch()
+        def process(args, **kwargs):
+            return SimpleNamespace(stdout="v26.13.1\n" if args[-1] == "--version" else str(node) + "\n")
+        with patch.object(runtime.shutil, "which", return_value="/version-manager/shims/node"), patch.object(runtime, "run", side_effect=process), patch.object(runtime, "fetch") as fetch:
+            self.assertEqual(runtime.ensure_node(self.root), (node, npm))
+            fetch.assert_not_called()
+
     def test_download_hash_failure_prevents_extraction(self):
         folder = self.root / "runtime"
         folder.mkdir()

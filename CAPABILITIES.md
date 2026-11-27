@@ -1,9 +1,15 @@
 # Find a method for the work
 
+[Existing executable implementations](IMPLEMENTATIONS.md) accompany selected
+methods. Follow their release, local fitting and caller checks before recreating
+equivalent code. Installation alone is not a qualified business outcome.
+
 The person names what they want. This repository supplies reusable methods, requirements and local fitting guidance; their existing tools perform the work. No AgenticU CLI, runtime install or account is required.
 
 | Request | Agent instructions | Status |
 | --- | --- | --- |
+| Make a recorded session searchable and cuttable; export an authored edit | [Work with recordings](capabilities/work-with-recordings/SKILL.md) | Draft-1 connects the existing tape implementation; see EVIDENCE.md for consumer qualification. An editor timeline is not a rendered video. |
+| Compose and exercise a branching customer journey | [Compose a customer journey](capabilities/compose-customer-journey/SKILL.md) | Draft-1 connects the existing journey library; routing simulation is distinct from provider execution. |
 | Build and operate an entire business around expertise, serving customers from the start | [Build and operate the business](capabilities/build-business/SKILL.md) | Experimental draft-2; draft-1 was exercised in a fictional business with actual delivery, correction and live operator transfer. Current revisions are not retroactively qualified; see EVIDENCE.md. |
 | Build a complete deployed acquisition and delivery journey | [Launch a measured funnel](capabilities/launch-measured-funnel/SKILL.md) | Experimental draft-2 adds work-taught owner-assisted provider fitting. Draft-1 is being exercised by a fresh recipient; complete commercial qualification remains pending. See EVIDENCE.md. |
 | Instrument and reconcile a commercial journey | [Measure the commercial journey](capabilities/measure-commercial-journey/SKILL.md) | Experimental draft-2 adds work-taught query freshness and eventual deduplication handling. Complete recipient qualification remains pending; see EVIDENCE.md. No particular analytics vendor, account or CLI is required. |

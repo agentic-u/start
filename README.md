@@ -13,3 +13,7 @@ This is an early Mac-first release under test. The setup includes local Git, Cod
 Setup sends no business messages, spends no money and publishes no business files. Later business work uses only the authority the person actually gives. This repository is public; their business records stay separate and are not published by following it.
 
 [What gets set up](SETUP.md) · [The session](BOOTSTRAP.md) · [Test evidence](EVIDENCE.md) · [Design and source pins](DESIGN.md)
+
+For current work, start with [capabilities](CAPABILITIES.md). Selected methods now
+connect to [acquirable implementations](IMPLEMENTATIONS.md): agents can use existing
+business and production tools without our private development checkout.

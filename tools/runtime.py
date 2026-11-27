@@ -13,7 +13,6 @@ import subprocess
 import sys
 import tarfile
 import tempfile
-import urllib.request
 
 NODE_VERSION = "26.13.1"
 ENTRY = "node_modules/@agentic-u/cli/dist/main.js"
@@ -133,11 +132,10 @@ def node_platform():
 
 
 def fetch(url, destination):
-    try:
-        with urllib.request.urlopen(url, timeout=120) as response, destination.open("wb") as output:
-            shutil.copyfileobj(response, output)
-    except OSError as error:
-        raise InstallError(f"download failed: {url}: {error}") from error
+    # Use the host's TLS trust configuration; standalone macOS Python can lack CA roots.
+    run(["curl", "--fail", "--location", "--silent", "--show-error",
+         "--proto", "=https", "--proto-redir", "=https", "--max-time", "120",
+         "--output", str(destination), url])
 
 
 def ensure_node(runtime):
@@ -145,9 +143,11 @@ def ensure_node(runtime):
     existing = shutil.which("node")
     if existing:
         if compatible_node(existing):
-            npm = Path(existing).resolve().parent / "npm"
+            # A version-manager shim resolves to its dispatcher, not Node's bin directory.
+            actual = Path(run([existing, "-p", "process.execPath"], capture_output=True).stdout.strip())
+            npm = actual.parent / "npm"
             if npm.is_file():
-                return Path(existing).resolve(), npm
+                return actual, npm
     local = runtime / f"node-v{NODE_VERSION}-{target}"
     if not (local / "bin/node").is_file():
         base = f"https://nodejs.org/dist/v{NODE_VERSION}/"
