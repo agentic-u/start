@@ -1,7 +1,7 @@
 // @effect-diagnostics-next-line nodeBuiltinImport:off -- Node host hashes exact artifact bytes.
 import { createHash } from "node:crypto";
 // @effect-diagnostics-next-line nodeBuiltinImport:off -- This is the local filesystem host, not core review logic.
-import { mkdirSync, readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, statSync } from "node:fs";
 // @effect-diagnostics-next-line nodeBuiltinImport:off -- The SQLite host creates only the private database's parent directory.
 import nodePath from "node:path";
 import { DatabaseSync } from "node:sqlite";
@@ -19,7 +19,7 @@ const Count = Schema.Number.check(
   Schema.isGreaterThanOrEqualTo(0)
 );
 
-const Status = Schema.Literals([
+export const Status = Schema.Literals([
   "waiting_input",
   "ready",
   "running",
@@ -125,12 +125,60 @@ export class JobError extends Schema.TaggedError<
     "corrupt",
   ]),
   message: Text,
+  next: Text,
   cause: Schema.optionalKey(Schema.Unknown),
 }) {}
 
-const fail = (reason: JobError["reason"], message: string): never => {
-  throw new JobError({ reason, message });
+const recovery: Readonly<Record<JobError["reason"], string>> = {
+  invalid:
+    "Use the operation input schema. A standard requires nonempty sections and evidence arrays of nonempty strings.",
+  storage:
+    "Inspect the storage cause and directory permissions; preserve existing bytes.",
+  conflict:
+    "Read job_show for the current revision. Use a new command key for changed input; start a new review if artifact bytes changed.",
+  missing:
+    "Use job_list to discover saved jobs, or job_start after recording a matching progress attempt.",
+  illegal:
+    "Read job_list for the legal next operations and job_show for the current revision.",
+  corrupt:
+    "Preserve the store and inspect the cause; do not overwrite or recreate corrupt records.",
 };
+
+const fail = (
+  reason: JobError["reason"],
+  message: string,
+  next: string = recovery[reason]
+): never => {
+  throw new JobError({ reason, message, next });
+};
+
+const following: Readonly<Record<ReviewJob["status"], readonly string[]>> = {
+  waiting_input: ["job_input", "job_cancel"],
+  ready: ["job_resume", "job_cancel"],
+  review_ready: ["job_resume", "job_cancel"],
+  running: ["job_resume", "job_cancel"],
+  waiting_approval: ["job_decide", "job_cancel"],
+  effect_unknown: ["job_continue", "job_cancel"],
+  failed_retryable: ["job_retry", "job_cancel"],
+  completed: [],
+  rejected: [],
+  failed_terminal: [],
+  cancelled: [],
+};
+
+const nextOperations = (job: ReviewJob): readonly string[] =>
+  job.status === "running" && job.effect
+    ? ["job_continue", "job_cancel"]
+    : following[job.status];
+
+export const JobListing = Schema.Struct({
+  id: Text,
+  revision: Count,
+  status: Status,
+  way: Text,
+  attempt: Text,
+  nextOperations: Schema.Array(Text),
+});
 
 const digest = (bytes: string | Uint8Array): string =>
   createHash("sha256").update(bytes).digest("hex");
@@ -182,7 +230,11 @@ const move = (job: ReviewJob, event: string): ReviewJob => {
   const [next] = transition(machine, snapshot, { type: event });
 
   if (next.value === job.status) {
-    return fail("illegal", `Cannot ${event} while ${job.status}.`);
+    return fail(
+      "illegal",
+      `Cannot ${event} while ${job.status}.`,
+      `Legal next operations: ${nextOperations(job).join(", ") || "none; this job is finished"}. Use the current revision from job_show.`
+    );
   }
 
   return { ...job, status: Schema.decodeUnknownSync(Status)(next.value) };
@@ -260,6 +312,7 @@ const decodeJob = (body: unknown): ReviewJob => {
     throw new JobError({
       reason: "corrupt",
       message: "Unsupported or corrupt job state; existing bytes preserved.",
+      next: recovery.corrupt,
       cause: error,
     });
   }
@@ -315,6 +368,7 @@ const boundary = <A>(body: () => A): Effect.Effect<A, JobError> =>
             reason: "storage",
             message:
               "Job storage or adapter failed; preserve state and inspect the cause.",
+            next: recovery.storage,
             cause,
           }),
   });
@@ -329,24 +383,60 @@ export const admitCommand = (
         new JobError({
           reason: "invalid",
           message: "Invalid job command.",
+          next: recovery.invalid,
           cause,
         })
     )
+  );
+
+const readStore = <A>(
+  path: string,
+  absent: () => A,
+  read: (db: DatabaseSync) => A
+): Effect.Effect<A, JobError> =>
+  boundary(() => {
+    if (statSync(path, { throwIfNoEntry: false }) === undefined) {
+      return absent();
+    }
+
+    const db = new DatabaseSync(path, { readOnly: true });
+
+    try {
+      return read(db);
+    } finally {
+      db.close();
+    }
+  });
+
+export const list = (path: string, includeFinished = false) =>
+  readStore(
+    path,
+    () => [],
+    (db) =>
+      db
+        .prepare("SELECT body FROM jobs ORDER BY id")
+        .all()
+        .map((row) => decodeJob(row.body))
+        .filter((job) => includeFinished || nextOperations(job).length > 0)
+        .map((job) => ({
+          id: job.id,
+          revision: job.revision,
+          status: job.status,
+          way: job.way,
+          attempt: job.attempt,
+          nextOperations: nextOperations(job),
+        }))
   );
 
 export const show = (
   path: string,
   id: string
 ): Effect.Effect<ReviewJob, JobError> =>
-  boundary(() => {
-    const db = new DatabaseSync(path, { readOnly: true });
-
-    try {
-      return get(db, id);
-    } finally {
-      db.close();
-    }
-  });
+  readStore(
+    path,
+    () => fail("missing", `No job ${id}.`),
+    (db) => get(db, id)
+  );
 
 const decide = (
   job: ReviewJob,
@@ -497,7 +587,13 @@ export const command = (
             job.status
           )
         ) {
-          return fail("illegal", `Cannot resume ${job.status}.`);
+          return fail(
+            "illegal",
+            `Cannot resume ${job.status}.`,
+            job.status === "waiting_input"
+              ? 'Call job_input with this id, current revision, a new key and standard: {sections: ["Required heading"], evidence: ["Required evidence string"]}; then job_resume.'
+              : `Use ${nextOperations(job).join(" or ") || "a new job_start; this job is finished"} with the current revision.`
+          );
         }
       }
 
@@ -528,6 +624,7 @@ const reviewArtifact = (claimed: ReviewJob) =>
         new JobError({
           reason: "corrupt",
           message: "Running review has no standard.",
+          next: recovery.corrupt,
         })
       );
     }
@@ -614,6 +711,7 @@ const dispatchDecision = <Requirements>(
         new JobError({
           reason: "corrupt",
           message: "Decision dispatch has no admitted intent.",
+          next: recovery.corrupt,
         })
       );
     }
@@ -626,6 +724,7 @@ const dispatchDecision = <Requirements>(
         new JobError({
           reason: "conflict",
           message: "Progress effect key has different content.",
+          next: recovery.conflict,
         })
       );
     }

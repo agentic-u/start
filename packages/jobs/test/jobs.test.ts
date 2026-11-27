@@ -18,9 +18,13 @@ import * as Progress from "@agentic-u/progress";
 import { it } from "@effect/vitest";
 import { Effect, Schema } from "effect";
 
-import { command, Job, show } from "../src/index.js";
+import { command, Job, list, show } from "../src/index.js";
 import type { JobCommand } from "../src/index.js";
-import { jobOperations, JobsStorage } from "../src/operations.js";
+import {
+  jobOperations,
+  jobListOperation,
+  JobsStorage,
+} from "../src/operations.js";
 
 const exec = promisify(execFile);
 
@@ -231,6 +235,105 @@ const ready = (
       revision: job.revision,
     });
   });
+
+it.effect(
+  "fresh stores are discoverable without creating a database and missing jobs have recovery",
+  () =>
+    Effect.gen(function* qualifyFreshDiscovery() {
+      const { database } = yield* setup;
+      assert.deepEqual(yield* list(database), []);
+      const missing = yield* Effect.flip(show(database, "absent"));
+      assert.equal(missing.reason, "missing");
+      assert.match(missing.next, /job_list/u);
+      yield* Effect.promise(() =>
+        assert.rejects(readFile(database), { code: "ENOENT" })
+      );
+    }).pipe(Effect.scoped)
+);
+
+it.effect(
+  "job discovery returns legal next operations and completed work only on request",
+  () =>
+    Effect.gen(function* qualifyJobDiscovery() {
+      const { database, start } = yield* setup;
+      let job = yield* send(database, start);
+      const waiting = yield* list(database);
+      assert.deepEqual(
+        waiting.map((row) => [
+          row.id,
+          row.revision,
+          row.status,
+          row.nextOperations,
+        ]),
+        [[job.id, job.revision, "waiting_input", ["job_input", "job_cancel"]]]
+      );
+
+      const error = yield* Effect.flip(
+        send(database, {
+          kind: "resume",
+          key: "bad-resume",
+          id: job.id,
+          revision: job.revision,
+        })
+      );
+
+      assert.equal(error.reason, "illegal");
+      assert.match(error.next, /job_input.*sections.*evidence/u);
+      assert.deepEqual(yield* show(database, job.id), job);
+      job = yield* send(database, {
+        kind: "cancel",
+        key: "cancel",
+        id: job.id,
+        revision: job.revision,
+      });
+      assert.deepEqual(yield* list(database), []);
+      assert.equal((yield* list(database, true))[0].status, "cancelled");
+      assert.deepEqual((yield* list(database, true))[0].nextOperations, []);
+    }).pipe(Effect.scoped)
+);
+
+it.effect(
+  "job_start rejects absent or mismatched progress attempts before saving and job_list exposes valid starts",
+  () =>
+    Effect.gen(function* qualifyStartAdmission() {
+      const { database, progress, start } = yield* setup;
+
+      const environment = {
+        databasePath: database,
+        progressPath: progress,
+        houseDirectory: path.dirname(database),
+      };
+
+      const { kind: _kind, progress: _progress, ...input } = start;
+
+      for (const changed of [
+        { attempt: "absent" },
+        { way: "other" },
+        { version: "v2" },
+      ]) {
+        const failure = yield* Effect.flip(
+          jobOperations[0]
+            .handler({ ...input, ...changed })
+            .pipe(Effect.provideService(JobsStorage, environment))
+        );
+
+        assert.equal(failure.reason, "missing");
+        assert.match(failure.next, /record.*started/u);
+      }
+
+      assert.deepEqual(yield* list(database), []);
+      yield* jobOperations[0]
+        .handler(input)
+        .pipe(Effect.provideService(JobsStorage, environment));
+
+      const jobs = yield* jobListOperation
+        .handler({})
+        .pipe(Effect.provideService(JobsStorage, environment));
+
+      assert.equal(jobs[0].id, start.id);
+      assert.deepEqual(jobs[0].nextOperations, ["job_input", "job_cancel"]);
+    }).pipe(Effect.scoped)
+);
 
 it.effect(
   "fresh process review and SIGKILL decision readback never duplicate progress",

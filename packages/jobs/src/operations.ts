@@ -4,9 +4,19 @@ import {
   defineContract,
   implement,
 } from "@agentic-u/operations";
+import * as Progress from "@agentic-u/progress";
 import { Context, Effect, Schema } from "effect";
 
-import { Job, JobError, Standard, command, run, show } from "./index.js";
+import {
+  Job,
+  JobError,
+  JobListing,
+  Standard,
+  command,
+  list,
+  run,
+  show,
+} from "./index.js";
 
 export class JobsStorage extends Context.Service<
   JobsStorage,
@@ -54,9 +64,18 @@ const jobShow = defineContract("job_show", {
   annotations: { readOnly: true, idempotent: true },
 });
 
+const jobList = defineContract("job_list", {
+  description:
+    "Discover private active jobs, their current revisions and legal next operations without running anything. Set includeFinished to include completed, rejected or cancelled jobs. Decision and continuation still require current approval.",
+  input: Schema.Struct({ includeFinished: Schema.optionalKey(Schema.Boolean) }),
+  output: Schema.Array(JobListing),
+  failure: JobError,
+  annotations: { readOnly: true, idempotent: true },
+});
+
 const jobInput = defineContract("job_input", {
   description:
-    "Supply explicit required headings and evidence strings for a waiting review.",
+    "Supply a standard with nonempty sections (required Markdown heading text) and evidence (required exact strings) arrays for a waiting review. Use the current job revision and a new command key.",
   input: Schema.Struct({ ...identified, standard: Standard }),
   output: Job,
   failure: JobError,
@@ -128,10 +147,47 @@ const dispatchApproved = (path: string, id: string) =>
     });
   });
 
+export const jobListOperation = implement(jobList, (input) =>
+  Effect.gen(function* listJobs() {
+    const storage = yield* JobsStorage;
+
+    return yield* list(storage.databasePath, input.includeFinished);
+  })
+);
+
 export const jobOperations = [
   implement(jobStart, (input) =>
     Effect.gen(function* startJob() {
       const storage = yield* JobsStorage;
+
+      const history = yield* Progress.resume(storage.progressPath).pipe(
+        Effect.mapError(
+          (cause) =>
+            new JobError({
+              reason: "storage",
+              message: "Could not read the progress attempt for job_start.",
+              next: "Inspect the progress store cause; preserve existing records.",
+              cause,
+            })
+        )
+      );
+
+      if (
+        !history.some(
+          (row) =>
+            row.kind === "started" &&
+            row.attempt === input.attempt &&
+            row.way === input.way &&
+            row.version === input.version
+        )
+      ) {
+        return yield* new JobError({
+          reason: "missing",
+          message:
+            "No started progress attempt matches this attempt, way and version.",
+          next: "Use record with kind started for this exact attempt, way and version, or select a matching started attempt from resume; then job_start.",
+        });
+      }
 
       return yield* command(
         storage.databasePath,
@@ -172,6 +228,7 @@ export const jobOperations = [
             reason: "illegal",
             message:
               "A decision is pending or complete; use approved job_continue to reconcile it.",
+            next: "Use job_continue with current approval, this id, the current revision and a new command key.",
           })
         );
       }
@@ -196,7 +253,12 @@ export const jobOperations = [
       }).pipe(
         Effect.catchTag("ApprovalDenied", (cause) =>
           Effect.fail(
-            new JobError({ reason: "illegal", message: cause.reason, cause })
+            new JobError({
+              reason: "illegal",
+              message: cause.reason,
+              next: "Use job_continue with current approval to reconcile the pending decision.",
+              cause,
+            })
           )
         )
       );
@@ -235,6 +297,7 @@ export const jobOperations = [
           new JobError({
             reason: "illegal",
             message: "There is no decision to reconcile.",
+            next: "Use job_list to find legal next operations; job_continue only reconciles an existing decision.",
           })
         );
       }
@@ -244,4 +307,5 @@ export const jobOperations = [
       return yield* dispatchApproved(storage.databasePath, input.id);
     })
   ),
+  jobListOperation,
 ] as const;

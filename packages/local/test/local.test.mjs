@@ -33,6 +33,33 @@ const catalog = {
   workflowNeeds: new Map(),
 };
 
+test("unsupported authored requirements never suggest an impossible endpoint repair", async () => {
+  const house = await mkdtemp(join(tmpdir(), "au-unsupported-"));
+
+  try {
+    const authored = {
+      ...catalog,
+      workflowNeeds: new Map([
+        [
+          "workflow:public",
+          [{ id: "authored:browser", purpose: "Read a page" }],
+        ],
+      ]),
+    };
+
+    await run(get(authored, "public", house));
+    await assert.rejects(run(check(authored, "public", house)), (error) => {
+      assert.equal(error.reason, "unsupported-adapter");
+      assert.match(error.next, /unresolved/u);
+      assert.match(error.next, /only runtime:git/u);
+
+      return true;
+    });
+  } finally {
+    await rm(house, { recursive: true, force: true });
+  }
+});
+
 test("real git journey: missing, immutable failed and passed receipts, exact stale revision/generation/time", async () => {
   const house = await mkdtemp(join(tmpdir(), "au-local-"));
 

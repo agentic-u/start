@@ -60,6 +60,7 @@ const names = [
   "job_cancel",
   "job_decide",
   "job_continue",
+  "job_list",
   "execute",
 ];
 
@@ -439,6 +440,21 @@ test("opted-in local Effect traces retain outcomes while excluding inputs and pr
 });
 
 test("fresh CLI processes share only the selected house's private durable job state", () => {
+  assert.deepEqual(json("job_list"), []);
+  json(
+    "record",
+    "--command",
+    JSON.stringify({
+      kind: "started",
+      key: "cli-attempt-start",
+      attempt: "cli-attempt",
+      way: "answer-with-a-receipt",
+      version: "1",
+      at: "2026-01-01T00:00:00Z",
+      originalInput: "Review a fictional local artifact.",
+    })
+  );
+
   const started = json(
     "job_start",
     "cli-durable-job",
@@ -461,6 +477,11 @@ test("fresh CLI processes share only the selected house's private durable job st
   const reloaded = json("job_show", "cli-durable-job");
 
   assert.equal(started.status, "waiting_input");
+  const [pending] = json("job_list");
+  assert.equal(pending.id, started.id);
+  assert.equal(pending.revision, started.revision);
+  assert.equal(pending.status, "waiting_input");
+  assert.ok(pending.nextOperations.includes("job_input"));
   assert.deepEqual(reloaded, started);
   assert.equal(started.artifact, path.join(house, "review.md"));
   assert.equal(
@@ -479,4 +500,6 @@ test("fresh CLI processes share only the selected house's private durable job st
 
   assert.equal(cancelled.status, "cancelled");
   assert.equal(json("job_show", "cli-durable-job").status, "cancelled");
+  assert.deepEqual(json("job_list"), []);
+  assert.equal(json("job_list", "--includeFinished")[0].status, "cancelled");
 });

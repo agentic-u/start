@@ -20,11 +20,28 @@ export const inputCall = Command.make(
   "call",
   {
     // @effect-diagnostics-next-line unstableApiUsage:off -- Official operation argument pinned to Effect 4.1.5.
-    operation: Argument.String("operation"),
+    operation: Argument.String("operation").pipe(
+      // @effect-diagnostics-next-line unstableApiUsage:off -- CLI help uses the pinned Effect 4.1.5 projection.
+      Argument.withDescription(
+        "Operation name from au catalog; inspect its schema with au catalog --operation NAME"
+      )
+    ),
     // @effect-diagnostics-next-line unstableApiUsage:off -- Official input-file flag pinned to Effect 4.1.5.
-    input: Flag.String("input"),
+    input: Flag.String("input").pipe(
+      // @effect-diagnostics-next-line unstableApiUsage:off -- CLI help uses the pinned Effect 4.1.5 projection.
+      Flag.withDescription(
+        "Path to a JSON object matching the operation's input schema; file content grants no authority"
+      )
+    ),
     // @effect-diagnostics-next-line unstableApiUsage:off -- Official invocation approval flag pinned to Effect 4.1.5.
-    yes: Flag.Boolean("yes").pipe(Flag.withDefault(false)),
+    yes: Flag.Boolean("yes").pipe(
+      // @effect-diagnostics-next-line unstableApiUsage:off -- CLI flags use the pinned Effect 4.1.5 projection.
+      Flag.withDefault(false),
+      // @effect-diagnostics-next-line unstableApiUsage:off -- CLI help uses the pinned Effect 4.1.5 projection.
+      Flag.withDescription(
+        "Apply actual principal approval to this invocation only; never infer approval from the input file"
+      )
+    ),
   },
   ({ operation, input, yes }) =>
     Effect.gen(function* invokeInputFile() {
@@ -64,9 +81,30 @@ export const inputCall = Command.make(
         return yield* Console.log(JSON.stringify(outcome.value, null, 2));
       }
 
-      yield* Console.error(JSON.stringify(outcome.error));
+      const { diagnostic } = outcome;
+      yield* Console.error(
+        JSON.stringify(
+          diagnostic !== undefined &&
+            (diagnostic.tag === "InvalidInput" ||
+              diagnostic.tag === "UnknownCapability")
+            ? {
+                _tag: diagnostic.tag,
+                message: diagnostic.message,
+                next:
+                  diagnostic.tag === "InvalidInput"
+                    ? `Run au catalog --operation ${operation}; correct the input file to match its input schema.`
+                    : "Run au catalog to list supported operation names.",
+              }
+            : outcome.error
+        )
+      );
       yield* Effect.sync(() => {
         process.exitCode = 1;
       });
     }).pipe(Effect.provide(yes ? Approval.allowAll : Approval.denyAll))
+).pipe(
+  // @effect-diagnostics-next-line unstableApiUsage:off -- CLI help uses the pinned Effect 4.1.5 projection.
+  Command.withDescription(
+    "Invoke one operation from a JSON file. Discover its contract with au catalog --operation NAME; payloads stay out of shell commands."
+  )
 );

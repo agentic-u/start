@@ -18,7 +18,7 @@ import {
   NodeRuntime,
   NodeServices,
 } from "@effect/platform-node";
-import { Console, Effect, Layer, Logger, Path } from "effect";
+import { Console, Effect, Layer, Logger, Option, Path, Schema } from "effect";
 import { McpProtocol, McpServer } from "effect/ai";
 import { Command, Flag } from "effect/cli";
 import { HttpRouter } from "effect/http";
@@ -30,6 +30,10 @@ import { operationWatch, withLocalTrace } from "./trace.js";
 
 // @effect-diagnostics-next-line unstableApiUsage:off -- Official CLI constructor pinned to Effect 4.1.5.
 const root = Command.make("au").pipe(
+  // @effect-diagnostics-next-line unstableApiUsage:off -- CLI navigation uses the pinned Effect 4.1.5 projection.
+  Command.withDescription(
+    "Staff runtime. Start with catalog for the operation map, then catalog --operation NAME for its exact contract. Public instructions: find/read/needs/ready. Private work: select --house explicitly."
+  ),
   // @effect-diagnostics-next-line unstableApiUsage:off -- Official shared CLI flags pinned to Effect 4.1.5.
   Command.withSharedFlags({
     // @effect-diagnostics-next-line unstableApiUsage:off -- Official flag parser pinned to Effect 4.1.5.
@@ -77,6 +81,14 @@ const jobsStorage = Effect.gen(function* selectPrivateJobsStorage() {
   };
 });
 
+const executeDescription =
+  "Run bounded JavaScript against public find/read/needs/ready only. Use call execute --input FILE; inspect catalog --operation execute for the contract.";
+
+class UnknownCapability extends Schema.TaggedError<
+  UnknownCapability,
+  { readonly brand: unique symbol }
+>()("UnknownCapability", { message: Schema.String, next: Schema.String }) {}
+
 const commands = operations.map((operation) => {
   const positional = ["words", "id", "way", "code"].find((field) =>
     Object.hasOwn(operation.contract.input.fields, field)
@@ -85,6 +97,12 @@ const commands = operations.map((operation) => {
   return toCommand(operation, {
     positional: positional === undefined ? [] : [positional],
   }).pipe(
+    // @effect-diagnostics-next-line unstableApiUsage:off -- CLI navigation uses the pinned Effect 4.1.5 projection.
+    Command.withDescription(
+      operation.contract.name === "execute"
+        ? executeDescription
+        : operation.contract.description
+    ),
     // @effect-diagnostics-next-line unstableApiUsage:off -- Official command service provision pinned to Effect 4.1.5.
     Command.provideEffect(CatalogStore, store),
     // @effect-diagnostics-next-line unstableApiUsage:off -- Private house context is selected by shared local flags using Effect CLI 4.1.5.
@@ -173,8 +191,74 @@ const serve = Command.make(
 );
 
 // @effect-diagnostics-next-line unstableApiUsage:off -- Official catalog host command pinned to Effect 4.1.5.
-const catalogCommand = Command.make("catalog", {}, () =>
-  Console.log(JSON.stringify(toCatalog(operations), null, 2))
+const catalogCommand = Command.make(
+  "catalog",
+  {
+    // @effect-diagnostics-next-line unstableApiUsage:off -- CLI discovery uses the pinned Effect 4.1.5 projection.
+    operation: Flag.String("operation").pipe(
+      // @effect-diagnostics-next-line unstableApiUsage:off -- CLI discovery uses the pinned Effect 4.1.5 projection.
+      Flag.optional,
+      // @effect-diagnostics-next-line unstableApiUsage:off -- CLI discovery uses the pinned Effect 4.1.5 projection.
+      Flag.withDescription(
+        "Read one operation's complete input, output and failure schemas"
+      )
+    ),
+    // @effect-diagnostics-next-line unstableApiUsage:off -- CLI discovery uses the pinned Effect 4.1.5 projection.
+    full: Flag.Boolean("full").pipe(
+      // @effect-diagnostics-next-line unstableApiUsage:off -- CLI discovery uses the pinned Effect 4.1.5 projection.
+      Flag.withDefault(false),
+      // @effect-diagnostics-next-line unstableApiUsage:off -- CLI discovery uses the pinned Effect 4.1.5 projection.
+      Flag.withDescription(
+        "Export all complete schemas; large output, use only for integration tooling"
+      )
+    ),
+  },
+  ({ operation, full }) =>
+    Effect.gen(function* discoverOperations() {
+      const catalog = toCatalog(operations);
+
+      if (Option.isSome(operation)) {
+        const selected = catalog.capabilities.find(
+          (entry) => entry.name === operation.value
+        );
+
+        if (selected === undefined) {
+          return yield* new UnknownCapability({
+            message: `No operation named ${operation.value}.`,
+            next: "Run au catalog to list operation names.",
+          });
+        }
+
+        return yield* Console.log(JSON.stringify(selected, null, 2));
+      }
+
+      return yield* Console.log(
+        JSON.stringify(
+          full
+            ? catalog
+            : {
+                version: catalog.version,
+                capabilities: catalog.capabilities.map(
+                  ({ name, description, annotations, needsApproval }) => ({
+                    name,
+                    description:
+                      name === "execute" ? executeDescription : description,
+                    annotations,
+                    needsApproval,
+                  })
+                ),
+                next: "au catalog --operation NAME for exact schemas; au call NAME --input FILE to invoke. --full exports all schemas.",
+              },
+          null,
+          2
+        )
+      );
+    })
+).pipe(
+  // @effect-diagnostics-next-line unstableApiUsage:off -- CLI navigation uses the pinned Effect 4.1.5 projection.
+  Command.withDescription(
+    "List the operation map without fetching public content; select --operation NAME for exact schemas."
+  )
 );
 
 // @effect-diagnostics-next-line unstableApiUsage:off -- Official OpenAPI host command pinned to Effect 4.1.5.
@@ -230,6 +314,7 @@ const program = Command.runWith(app, { version: "0.1.0" })(
     TraceError: writeFailure,
     JobError: writeFailure,
     InputCallError: writeFailure,
+    UnknownCapability: writeFailure,
   })
 );
 

@@ -70,8 +70,10 @@ test("file-input call preserves donor unknown-operation and exact-input failures
 
   assert.notEqual(unknown.status, 0);
   assert.equal(JSON.parse(unknown.stderr)._tag, "UnknownCapability");
+  assert.match(JSON.parse(unknown.stderr).next, /au catalog/u);
   assert.notEqual(invalid.status, 0);
   assert.equal(JSON.parse(invalid.stderr)._tag, "InvalidInput");
+  assert.match(JSON.parse(invalid.stderr).next, /catalog --operation read/u);
 });
 
 test("file-input syntax and filesystem failures are typed and nonzero", async () => {

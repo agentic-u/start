@@ -131,6 +131,17 @@ test("filesystem consumer retains exact recursive scoped content and updates wit
       readSelectedBundle({ directory, id: "workflow:a" })
     );
 
+    assert.deepEqual(
+      await run(readSelectedBundle({ directory, id: "a" })),
+      selected
+    );
+
+    const qualified = await run(
+      acquireBundle({ catalog: await catalog(), id: "workflow:a", directory })
+    );
+
+    assert.equal(qualified.digest, first.digest);
+
     assert.equal(
       selected.documents[0].text,
       "exact\n instructions\n  preserved"

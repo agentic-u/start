@@ -11,6 +11,9 @@ import {
 
 const Text = Schema.NonEmptyString;
 
+const bundleId = (id: string): string =>
+  id.includes(":") ? id : `workflow:${id}`;
+
 export const BundleSelection = Schema.Struct({
   format: Schema.Literal("agenticu-bundle/1"),
   generation: Text,
@@ -70,8 +73,10 @@ export const readSelectedBundle = ({
   readonly id: string;
 }): Effect.Effect<Bundle, BundleError> =>
   Effect.gen(function* readSelected() {
+    const selectedId = bundleId(id);
+
     const referenceText = yield* Effect.tryPromise({
-      try: () => readSelection(directory, id),
+      try: () => readSelection(directory, selectedId),
       catch: (cause) =>
         new BundleError({
           reason:
@@ -124,7 +129,7 @@ export const readSelectedBundle = ({
       )
     );
 
-    if (bundle.id !== id) {
+    if (bundle.id !== selectedId) {
       return yield* new BundleError({
         reason: "invalid",
         message: "Selected bundle identity disagrees with the requested way.",
@@ -159,7 +164,7 @@ export const acquireBundle = ({
     }
 
     const selected = catalog.data.documents.find(
-      (doc) => doc.id === id || doc.id === `workflow:${id}`
+      (doc) => doc.id === bundleId(id)
     );
 
     if (!selected) {

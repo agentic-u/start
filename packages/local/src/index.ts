@@ -594,13 +594,21 @@ export const check = (
     const receipts: (typeof Receipt.Type)[] = [];
 
     for (const id of wanted.requirements) {
+      if (id !== "runtime:git") {
+        throw failure(
+          "unsupported-adapter",
+          `No runtime check adapter exists for ${id}.`,
+          "Keep this authored requirement unresolved. Binding an endpoint cannot make it checkable; only runtime:git currently has an implemented check."
+        );
+      }
+
       const binding = state.bindings.find((b) => b.key === id);
 
       if (binding === undefined || binding.state !== "bound") {
         throw failure(
           "missing-binding",
           `No selected binding for ${id}.`,
-          "Bind an exact endpoint; do not assert have=ready."
+          "Bind runtime:git using adapter git and an exact git repository endpoint, then check again."
         );
       }
 
