@@ -3,7 +3,7 @@ name: build-business
 description: Build and operate an entire business around a principal's expertise, with customer contact, actual delivery, economics and continuing responsibility. Use when asked to make a business real end to end, not only prepare marketing or a plan.
 compatibility: A file-capable agent using its existing authorized tools. No AgenticU CLI or existing business SDK is required.
 metadata:
-  revision: "draft-1"
+  revision: "draft-2"
 ---
 
 # Build and operate the business
@@ -34,6 +34,10 @@ For each actual dependency establish the information/action needed and whether t
 
 Make usable media, pages, documents, tools and services through ordinary tools. Inspect results and judge quality, not existence alone. Connect native event/record owners and read back effects. Reconcile uncertain sends/payments/deployments before retrying. Never invent customers, transactions, testimonials, credentials or provider success. Separate simulation/provider test mode from real commercial outcomes.
 
+Exercise the delivered customer journey, not only implementation calculations or a seller reference output. Use actual source updates, preview/apply, save/restore and the permitted completion/export path where relevant. Check that guidance, selected form targets, current data and approval controls still agree after changes. Keep customer-facing output separate from private source trace and financial/reviewer records. A receiving agent's use, human adoption, source generalization and commercial response are distinct observations.
+
+Preserve first outputs and tool activity before repair. Copy browser downloads out of temporary sessions and verify the durable copies before closing/reloading/clearing those sessions. Preserve exact bytes and a size/hash manifest when identity matters; a text attachment may normalize line endings. Use native file transfer or an adequate encoded artifact envelope instead of pretending copied text is the original. Retain assistance, missing originals and failed paths honestly. A later repeated output is not the lost first output.
+
 Maintain each customer's current scope/terms, source inputs, responsibility, verified last action, next trigger and unresolved choices. Reconcile finance against actual recorded transactions, fees, refunds and obligations; forecasts differ from observed money. Required professional/provider/human decisions retain their actual status.
 
 When ongoing work is requested and authorized, register a supported trigger and verify its receipt. A written task is not a process; an idle conversation is not monitoring. Retain a usable return path if operation isn't activated. Keep failures visible and bounded by authority.
@@ -41,6 +45,8 @@ When ongoing work is requested and authorized, register a supported trigger and 
 ## Continue and improve
 
 Leave one clearly current handover linking original sources, business understanding, fitting, customer work, money, triggers and decisions. Replace stale conclusions in that summary; retain history separately. Fresh agents check current facts and continue without duplicate effects or repeated intake.
+
+For an actual operator change, preserve the live business and unfinished obligations; retire and verify outgoing scheduled work so two operators do not act concurrently. Keep required services and authentication intact. State which monitoring is now absent and have the incoming operator explicitly own its replacement. A handover must not silently finish the job or count pending acceptance as earned money. Keep history usable without recursively embedding entire previous working copies on every routine restore; observe storage/size behavior before claiming durable reuse.
 
 Extract reusable methods/implementations where concrete work demonstrates need. Separate their contract from private facts, accounts and permissions. A second situation or receiving business tests whether a part travels. Preserve failures/assistance; a lucky outcome is not universal expertise.
 
