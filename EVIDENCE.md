@@ -1,5 +1,13 @@
 # Qualification record
 
+## Missing access and one scheduled return, 2026-11-26
+
+A new GPT-6.1-Sol low agent retrieved commit `67a8fd4` and recovery draft-2 in a fresh fictional company folder. Estimates, proposals, finance and crew records were available; a controlled office permission gate blocked inbox reads and sends. It asked for the specific shared-mailbox reading/sending access and continued independent analysis while the asynchronous question was pending. After the operator granted access, it read current histories, excluded declined/deferred customers, reconciled all seven estimates and sent four contained office messages. Original commercial terms and proposals were preserved. No AU runtime was installed.
+
+The agent registered a real, once-only T3 schedule. That schedule resumed the same thread/session without a parent launch and found a newly supplied fictional reply requesting a discount and guaranteed date. It retained the customer's non-acceptance, calculated the proposed reduction against estimated direct cost, and requested a specific owner decision with a recommendation. The operator retained the original price and required feasibility/owner approval before any date. This is one automatic resumption in the existing context, not a fresh-context scheduling test or long-running autonomous operation.
+
+Task writes persisted in the corrected office, but the mock UI exposed no task editing. Earlier access-wait tasks remained stale; the agent explicitly superseded them in current case notes and the handover. Task lifecycle maintenance is not qualified. The office permission gate does not qualify third-party OAuth, commercial CRM integration, message delivery or production reliability. Business facts, counterpart messages and owner roleplay are synthetic; no new sale or booking is established. Complete native rollout, full T3 messages and state snapshots remain in the private owning Start record, `experiments/agentic-library/copilots/atlas-work/world/CASE-STUDY-ACCESS.md`.
+
 ## First capability-world run, 2026-11-26
 
 Two actual GPT-6.1-Sol low contexts used an existing fictional paving business without prior AU onboarding. The first retrieved this repository at a4ed9fc and used recovery draft-1 through the native T3 browser tools; it did not install the AU runtime. It reconciled seven estimates, sent four messages within the local simulated office, saved a scope comparison, and retained a local lock/handover. A fresh context then rechecked records, found a changed crew calendar, recorded the owner's deferral and continued without duplicate outreach. No real customer, new sale, booking, autonomous recurrence or generic CRM readiness is established.
@@ -14,7 +22,7 @@ README, BOOTSTRAP, SETUP and newly generated workspace instructions route from t
 
 `pnpm check`, `pnpm test` and `pnpm acceptance:cold-install` passed through the pinned mise environment. Python ran 13 checks with the optional native configuration test skipped because CODEX_TEST_BINARY was unset. The upstream Agent Skills reference validator accepted the relocated skill. The cold-install result concerns the retained engineering package, not a fresh-agent exercise of this new routing.
 
-No Atlas session, fresh recipient arrival or interrupted-agent run was performed for this change. Prior run evidence below remains historical; it does not qualify the newly authored sales method, file-based fitting protocol or no-runtime arrival journey. Their actual recipient qualification remains to be done.
+These repository checks alone did not qualify recipient behavior. The later capability-world runs above exercise the new routing and file-based method in fictional businesses; the older setup evidence below concerns its own tested revisions.
 
 ## Earlier setup qualification
 

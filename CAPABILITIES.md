@@ -4,7 +4,7 @@ The person names what they want. This repository supplies reusable methods, requ
 
 | Request | Agent instructions | Status |
 | --- | --- | --- |
-| Revive unfinished estimates, improve a proposal, or make follow-up work reliably | [Recover worthwhile opportunities](capabilities/recover-opportunities/SKILL.md) | Draft method under test; no completed recipient run or sales outcome claimed |
+| Revive unfinished estimates, improve a proposal, or make follow-up work reliably | [Recover worthwhile opportunities](capabilities/recover-opportunities/SKILL.md) | Draft method exercised in fictional business worlds, including missing access and one scheduled return; see EVIDENCE.md for limits. No real sales outcome claimed. |
 
 Read the selected skill and the companion files it names. Fit its recurring requirements to this company's actual records, tools/accounts and authority; keep the fitting and work private in their existing workspace. Establish relevant current access rather than treating a connection label as readiness. Ask for specific missing facts, decisions or access; continue independent work when possible.
 
