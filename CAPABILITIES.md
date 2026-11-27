@@ -5,7 +5,7 @@ The person names what they want. This repository supplies reusable methods, requ
 | Request | Agent instructions | Status |
 | --- | --- | --- |
 | Build and operate an entire business around expertise, serving customers from the start | [Build and operate the business](capabilities/build-business/SKILL.md) | Experimental draft-2; draft-1 was exercised in a fictional business with actual delivery, correction and live operator transfer. Current revisions are not retroactively qualified; see EVIDENCE.md. |
-| Build a complete deployed acquisition and delivery journey | [Launch a measured funnel](capabilities/launch-measured-funnel/SKILL.md) | Source-adapted draft-1; fresh recipient qualification pending. Includes offer, persuasive work, actual journey, measurement, follow-up and traffic decisions. |
+| Build a complete deployed acquisition and delivery journey | [Launch a measured funnel](capabilities/launch-measured-funnel/SKILL.md) | Experimental draft-2 adds work-taught owner-assisted provider fitting. Draft-1 is being exercised by a fresh recipient; complete commercial qualification remains pending. See EVIDENCE.md. |
 | Instrument and reconcile a commercial journey | [Measure the commercial journey](capabilities/measure-commercial-journey/SKILL.md) | Source-adapted draft-1; fresh recipient qualification pending. No particular analytics vendor, account or CLI is required. |
 | Revive unfinished estimates, improve a proposal, or make follow-up work reliably | [Recover worthwhile opportunities](capabilities/recover-opportunities/SKILL.md) | Draft method exercised in fictional business worlds, including missing access and one scheduled return; see EVIDENCE.md for limits. No real sales outcome claimed. |
 

@@ -3,7 +3,7 @@ name: launch-measured-funnel
 description: Build and operate a complete offer-to-delivery acquisition journey with persuasive copy, actual creative, deployment, tracking and follow-up. Use for a live funnel or commercial acquisition responsibility, not merely a landing-page draft.
 compatibility: A file-capable agent using its existing authorised creative, browser, deployment, communication and commerce tools. Existing SDKs and the current AgenticU CLI are not required.
 metadata:
-  revision: "draft-1"
+  revision: "draft-2"
 ---
 
 # Launch a measured commercial journey
@@ -29,6 +29,8 @@ Counterread the target alone for selling force and against its original source/s
 Choose the implementation from the job and local fitting, not a mandatory framework. Build the appropriate destination and fulfilment, then connect the public path: page/creative → action → intake/qualification → booking/checkout or equivalent → confirmation → useful delivery → follow-up/review. Avoid an empty lead form whose submissions go nowhere. Persist actual records and give staff a usable return path. Respect consent and communication authority; a local spool is not an external send.
 
 Compose [measure-commercial-journey](../measure-commercial-journey/SKILL.md) while building, before traffic. Keep the same offer, audience, identity and event meaning coherent across components. Fit required hosting, domain, forms/storage, scheduling/payment/delivery and analytics through the capability lock. State actual missing means and continue useful work; ask for owner-only setup only when available authorised access cannot resolve it. Never copy sign-in state or reset the owner's environment.
+
+When administration must stay with the owner, use a concrete actuation request: selected account/project, new versus existing resources, exact permitted operations, immutable release archive and file hashes, configuration overlay, expected native receipts and subsequent query/update responsibility. Verify that the requested resource names are unused before creation. Preserve old bundles; do not silently deploy a stale archive after source or namespace changes. Return actual resource IDs and readbacks without moving administrative credentials into the agent's environment. Record owner assistance explicitly; a proposed bridge is not a callable capability. A provider quota rejection is a real missing means: preserve it, leave billing and unrelated resources alone, continue independent work and take any changed target or plan to its owner.
 
 Deploy the actual build to the authorised target. Verify reachable exact bytes/version, desktop and mobile journey, validation/failure states, persisted intake, destination, consent/identity, tracking and downstream handoff. Use marked test submissions/transactions within authority and read effects back. A build, public URL or analytics hit is not complete delivery. An actual deployed lab preview remains distinct from real commercial release and demand.
 
