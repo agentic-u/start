@@ -2,6 +2,8 @@
 
 Both an existing agent and a fresh setup use the same public release bundle. The installer needs Python 3.11.8 or newer on macOS or Linux (arm64 or x64). It does not need a website checkout, a global Node installation, or copied agent settings.
 
+Get `agenticu-runtime-0.1.0.tar.gz` from the [official runtime release](https://github.com/agentic-u/start/releases/tag/runtime-v0.1.0) and extract it into a release directory. The bootstrap checkout supplies `tools/runtime.py`; the archive supplies the packages and their locked dependencies.
+
 From this checkout, run:
 
 ```

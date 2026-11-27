@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^(functions\\.)?exec_command$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/scripts/hooks/codex-pre-tool-use.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
