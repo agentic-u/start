@@ -3,7 +3,7 @@ name: recover-opportunities
 description: Recover worthwhile unfinished sales opportunities, improve unclear proposals and carry follow-up through replies, exceptions and handover using the company's existing tools. Use when the principal asks to revive estimates or make follow-up work reliably.
 compatibility: An agent with file access and authorized access to the company's existing tools. No AgenticU CLI, runtime installation or account required.
 metadata:
-  revision: "draft-1"
+  revision: "draft-2"
 ---
 
 # Recover worthwhile opportunities
@@ -38,7 +38,7 @@ Keep every active case's source references, current conclusion, last verified ac
 
 For recurrence, use a supported event or scheduling facility only when needed and authorized, and verify it was actually registered. If no facility exists, report that work waits for an explicit return; do not promise to watch an inbox from a completed chat.
 
-At handover leave a compact entry pointing to the selected method/version, local lock, active cases, waits and exceptions. A fresh agent verifies relevant current access/authority, reads changed source records and continues rather than repeating intake. Write only what the next worker needs; do not replace original source with a summary.
+At handover leave a compact entry pointing to the selected method/version, local lock, active cases, waits and exceptions. Keep one clearly current summary: replace superseded availability, decisions and next actions in that summary, retaining earlier states in the normal history instead of appending a correction below an obsolete headline. A fresh agent verifies relevant current access/authority, reads changed source records and continues rather than repeating intake. Reconcile the handover against those current records before relying on it. Write only what the next worker needs; do not replace original source with a summary.
 
 ## Review the result
 

@@ -23,6 +23,8 @@ One entry per requirement actually considered:
 
 Reuse a fitting only after checking that its identity, scope and observations still apply. A copied file does not reproduce its account session or permission. Do not relabel waiting as bound because someone said setup will happen later.
 
+Bind to the source that supplies changing business facts, not to a copied fact as if it were permanent setup. For example, the crew calendar supplies current capacity; “three days available” is a dated observation, not an enduring property of the calendar binding. Recheck before using it and update the current work summary when it changes.
+
 ### Dependencies and unresolved work
 
 Record the active branch and its selected dependency order from requirements.md. Keep missing definitions, failed observations, owner-only facts/decisions/access and genuinely time-dependent waits explicit. Separate work blocked by each gap from independent work that can continue.

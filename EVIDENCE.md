@@ -1,5 +1,13 @@
 # Qualification record
 
+## First capability-world run, 2026-11-26
+
+Two actual GPT-6.1-Sol low contexts used an existing fictional paving business without prior AU onboarding. The first retrieved this repository at a4ed9fc and used recovery draft-1 through the native T3 browser tools; it did not install the AU runtime. It reconciled seven estimates, sent four messages within the local simulated office, saved a scope comparison, and retained a local lock/handover. A fresh context then rechecked records, found a changed crew calendar, recorded the owner's deferral and continued without duplicate outreach. No real customer, new sale, booking, autonomous recurrence or generic CRM readiness is established.
+
+The mock office's task-write route failed; no task-persistence pass is claimed. The agents retained verified case notes and explicitly reported that automation was absent. The first handover kept an obsolete availability summary; the second appended a current update. Draft-2 guidance now requires one plainly current summary with earlier states kept as history and separates live business facts from stable bindings. This revision has not been recipient-qualified by those draft-1 runs.
+
+Full transcripts, both complete provider rollouts, source/world snapshots and interventions are retained privately outside the helper. The verified final archive SHA-256 is `c1f7ad0ddba53fa05eafc1f97cd3da2a5e1ca5e37c9d313ca83b29305f07db3e`. The experiment's owning record and reproducible mock office live in Start, `experiments/agentic-library/copilots/atlas-work/world/`; raw records are not published here. The underlying business and counterpart behavior were simulated and directed by the orchestrator from frozen facts.
+
 ## Repository capability routing, 2026-11-26
 
 README, BOOTSTRAP, SETUP and newly generated workspace instructions route from the actual request and existing state. Prior AgenticU onboarding is not required for an existing-business job. The repository now carries the draft recovery skill and its requirement/local-fitting references through CAPABILITIES.md. Automatic installation/use of the current runtime is removed; RUNTIME.md remains a separately requested engineering interface. Existing business instructions were not rewritten.
