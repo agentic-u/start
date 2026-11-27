@@ -62,6 +62,11 @@ a new reporting workspace, create a named `.tldraw` document through the app's
 `POST /api/docs/create` endpoint in the chosen private business folder. Do not
 construct or modify the archive on disk. Record its actual returned ID and inspect
 its ownership; a different open file is never a substitute for a missing target.
+Supply the directory explicitly, for example
+`{"name":"Ad contribution","directory":"/absolute/business/folder"}`, and check
+the returned `filePath` before proceeding. An unexpected location is not a reason
+to create another same-named document. Preserve and reconcile the actual files
+and open windows; identical titles/positions can make native automation ambiguous.
 
 Choose the lightest useful presentation. Static tables, labels and source notes
 can be ordinary shapes. An interactive table, editable scenario inputs, a chart or
@@ -81,10 +86,13 @@ rewrite original provider observations. Let tables expand to the actual hierarch
 and rows the job needs. Do not impose a small canned dashboard or invent numbers
 to make a table look complete.
 
-Keep provider extraction, sensitive joins and authoritative calculations in their
+Keep provider extraction, sensitive joins and authoritative source fitting in their
 owning process. A board can render a prepared private data snapshot; the snapshot's
 source window, completeness and uncertainty travel with it. Secrets never belong
-in shapes, script files or snapshots. A live authenticated service can be fitted
+in shapes, script files or snapshots. A small pure scenario model may run locally
+in the board over those fitted inputs: verify its results independently and keep
+assumptions separate from observations. Do not add a server merely for local
+arithmetic or sliders. A live authenticated service can be fitted
 separately. On an office-server board use its supported connector/key mechanism,
 which keeps keys server-side. Do not install a team server merely to show a local
 report, or treat a local-file script as if it had server connectors or Node access.

@@ -80,3 +80,10 @@ Two fresh Sol low contexts exercised fictional raw exports with complete and
 partial analytics coverage. A saved tldraw office 1.25.0 board exercised calculated
 and uncalculated scenario inputs. These qualify those bounded paths, not live
 merchant connectors, clean desktop installation or universal profitability.
+
+An isolated Atlas recipient subsequently acquired public starter `246e0f7` and
+composed its own calculation and durable board from original fictional exports.
+Its local pure scenario model avoids a server solely for arithmetic; source
+fitting and observations remain separate. Exact-document app-API input checks
+passed; duplicate restored test-window titles blocked native pointer targeting.
+EVIDENCE.md retains that distinction rather than claiming a complete desktop path.

@@ -176,3 +176,32 @@ state unless explicitly persisted for handoff. The existing installed app was
 reused: clean installation, other OSes, live provider refresh and principal
 acceptance were not exercised. Public acquisition instructions cite the official
 app distribution and current documentation; proprietary app code is not bundled.
+
+## Atlas recipient composition, 2026-11-27
+
+A fresh GPT-6.1-Sol low recipient in the isolated Mac helper received the public
+starter URL and original fictional exports, without the earlier report, code,
+canvas or conversation. It acquired starter `246e0f7`, selected both methods and
+built its own source-specific calculations, report and durable tldraw workbench.
+It retained the delayed linked upsell/refund, counted the shared parcel once,
+excluded the warehouse duplicate, reconciled $290 gross into $220 linked and $70
+unassigned, and withheld complete per-ad profitability. Baseline linked estimates
+matched the independently checked $51/$13/-$20 and $44 after all media.
+
+The recipient exercised a support assumption and reopened the saved board. The
+coordinator independently used the exact document's rendered input controls via
+the app API: $4.25 unit cost, $2 support/frontend, 5% additional reserve explicitly
+on net revenue, and $10 target/frontend produced $18 linked contribution after
+all media and $64 allowable CPA. These agree with independent arithmetic. Original
+gross and missing attribution stayed unchanged; base was restored and saved.
+An Atlas screenshot showed the actual changed surface. This is app-API-driven UI
+verification, not a passing Atlas mouse/keyboard journey: two empty same-titled
+test documents restored alongside the actual report and Atlas refused ambiguous
+window selection. No refused input was delivered. The test app was closed after
+saving; other helper apps and retained businesses were preserved.
+
+The installed official app was reused, not downloaded afresh. No live new-merchant
+API or principal acceptance is inferred. Complete T3 messages, native provider
+rollout and business artifacts are privately retained outside the helper; the
+owning coordinator verifies their archive before any clearing. No AU runtime,
+private SDK checkout or recipient audit assignment was required.
