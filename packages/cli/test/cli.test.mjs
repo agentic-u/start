@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { spawn, spawnSync } from "node:child_process";
+import { execFile, spawn, spawnSync } from "node:child_process";
 import { once } from "node:events";
 import { mkdtemp, readFile } from "node:fs/promises";
 import { createServer } from "node:net";
@@ -8,6 +8,7 @@ import path from "node:path";
 import test from "node:test";
 import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 
 const binary =
   process.env.AU_BIN ??
@@ -82,6 +83,18 @@ const json = (...args) => {
   return JSON.parse(result.stdout);
 };
 
+const runFile = promisify(execFile);
+
+const jsonAsync = async (...args) => {
+  const { stdout } = await runFile(
+    process.execPath,
+    [binary, "--catalog", fixture, "--house", house, ...args],
+    { encoding: "utf-8", timeout: 15_000 }
+  );
+
+  return JSON.parse(stdout);
+};
+
 test("CLI discovers and reads actual generated public content", () => {
   const found = json("find");
   assert.equal(
@@ -136,18 +149,44 @@ test("HTTP projection has CLI parity and rejects invalid input", async (t) => {
     { stdio: ["ignore", "pipe", "pipe"] }
   );
 
-  t.after(() => child.kill());
+  const closed = once(child, "close");
+
+  t.after(async () => {
+    child.kill();
+    await closed;
+  });
   let logs = "";
+  let output = "";
+
   child.stderr.on("data", (chunk) => {
     logs += chunk;
   });
+  child.stdout.on("data", (chunk) => {
+    output += chunk;
+  });
   const base = `http://127.0.0.1:${port}`;
+
+  const diagnostics = () =>
+    `server pid=${child.pid} exit=${child.exitCode} signal=${child.signalCode}\nstdout: ${output}\nstderr: ${logs}`;
+
+  const requestHttp = async (route, options) => {
+    try {
+      return await fetch(`${base}${route}`, options);
+    } catch (error) {
+      throw new Error(`HTTP ${route} failed; ${diagnostics()}`, {
+        cause: error,
+      });
+    }
+  };
+
   let ready = false;
 
   for (let attempt = 0; attempt < 80; attempt += 1) {
     try {
       // oxlint-disable-next-line no-await-in-loop -- Each bounded startup probe depends on the previous actual server state.
       const response = await fetch(`${base}/openapi.json`);
+      // oxlint-disable-next-line no-await-in-loop -- Consume this observed startup response before its connection returns to the client pool.
+      await response.arrayBuffer();
 
       if (response.ok) {
         ready = true;
@@ -155,7 +194,9 @@ test("HTTP projection has CLI parity and rejects invalid input", async (t) => {
       }
     } catch (error) {
       if (error.cause?.code !== "ECONNREFUSED") {
-        throw error;
+        throw new Error(`HTTP startup failed; ${diagnostics()}`, {
+          cause: error,
+        });
       }
     }
 
@@ -167,7 +208,7 @@ test("HTTP projection has CLI parity and rejects invalid input", async (t) => {
     await delay(50);
   }
 
-  assert.ok(ready, logs);
+  assert.ok(ready, diagnostics());
 
   await Promise.all(
     [
@@ -185,26 +226,33 @@ test("HTTP projection has CLI parity and rejects invalid input", async (t) => {
       ],
       ["execute", { code: program }, [program]],
     ].map(async ([operation, input, args]) => {
-      const response = await fetch(`${base}/${operation}`, {
+      const response = await requestHttp(`/${operation}`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(input),
       });
 
       assert.equal(response.status, 200);
-      assert.deepEqual(await response.json(), json(operation, ...args));
+
+      const [actual, expected] = await Promise.all([
+        response.json(),
+        jsonAsync(operation, ...args),
+      ]);
+
+      assert.deepEqual(actual, expected);
     })
   );
 
-  const invalid = await fetch(`${base}/read`, {
+  const invalid = await requestHttp("/read", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ id: 3 }),
   });
 
   assert.equal(invalid.status, 400);
+  await invalid.arrayBuffer();
 
-  const absent = await fetch(`${base}/read`, {
+  const absent = await requestHttp("/read", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ id: "absent" }),
@@ -214,7 +262,7 @@ test("HTTP projection has CLI parity and rejects invalid input", async (t) => {
   const absentBody = await absent.json();
   assert.equal(absentBody.reason, "not-found");
 
-  const denied = await fetch(`${base}/accept`, {
+  const denied = await requestHttp("/accept", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ command: acceptance }),
@@ -326,7 +374,7 @@ test("MCP projection lists and executes the same checked operations", async (t) 
       assert.notEqual(called.result.isError, true, JSON.stringify(called));
       assert.deepEqual(
         JSON.parse(called.result.content[0].text),
-        json(name, ...cliArgs)
+        await jsonAsync(name, ...cliArgs)
       );
     })
   );

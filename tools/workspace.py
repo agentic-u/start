@@ -130,6 +130,7 @@ At the start of every thread:
 3. If `picture.md` exists, read it. Its absence is normal during onboarding; do not restart or ask for the saved story again.
 4. If phase is complete, briefly recall the last result and ask what changed. Otherwise, continue from the pending question. First acknowledge what is already saved.
 5. Follow `{REPO / 'BOOTSTRAP.md'}` for the active session. Record each exact owner answer with the workspace tool before replying. Save the next checkpoint before asking its question.
+6. If `.agenticu/runtime/runtime.json` exists, use its installed Node and CLI entry with `--house` pointing here. `catalog` describes the supported operations; `resume` reads learning receipts and `status` checks local fit. Do not reinstall a completed runtime. Learning receipts, actual binding checks and this onboarding journal have separate meanings; none grants outward authority.
 
 Work in this folder. The owner may explicitly hand you another file or repo. Do not install into, overwrite, reset or clean an existing business folder. Make new work in projects/; keep separate clones in repos/ and register meaningful folders as T3 projects. Use local main by default; no worktrees unless the owner requests one.
 
