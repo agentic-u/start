@@ -326,7 +326,7 @@ describe("rat-stack pattern rules", () => {
   });
   it("turns every pattern rule on in the repo config", () => {
     const configSource = readFileSync(
-      path.join(repoRoot, "oxlint.config.ts"),
+      path.join(repoRoot, "packages/fence/config.ts"),
       "utf-8"
     );
 

@@ -23,7 +23,14 @@ type PropertyNode = NodeOfType<"Property">;
 
 type StaticKeyValue = NodeOfType<"Literal">["value"] | null;
 
-const repoRoot = path.resolve(import.meta.dirname, "../../..");
+import {
+  isBrowserFile,
+  isRuntime,
+  isView,
+  projectLayout,
+  sourcePath,
+} from "./project.ts";
+import type { ProjectLayout } from "./project.ts";
 
 const clientNames = new Set([
   "AtomRpc",
@@ -56,16 +63,7 @@ const browserContractModules = new Set([
   "packages/devtools/contracts",
 ]);
 
-const workspacePath = (filename: string) => {
-  const relative = path
-    .relative(repoRoot, path.resolve(filename))
-    .split(path.sep)
-    .join("/");
-
-  const match = /(?:^|\/)(?<workspace>(?:apps|packages)\/.+)$/u.exec(relative);
-
-  return match?.groups?.workspace ?? relative;
-};
+const workspacePath = sourcePath;
 
 const isWithin = (filename: string, directory: string) =>
   filename === directory || filename.startsWith(`${directory}/`);
@@ -82,7 +80,9 @@ const isInfraApp = (filename: string) => isWithin(filename, "apps/infra");
 const isFeature = (filename: string) =>
   /^apps\/[^/]+\/src\/(?:dev\/)?features\/.+/u.test(filename);
 
-const isBrowserZone = (filename: string) =>
+const isBrowserZone = (filename: string, layout: ProjectLayout) =>
+  isBrowserFile(filename, layout) ||
+  isView(filename, layout) ||
   isFeature(filename) ||
   /^apps\/[^/]+\/src\/(?:dev\/)?client\/.+/u.test(filename);
 
@@ -124,7 +124,8 @@ const isStringModule = (node: ESTree.Expression): string | null => {
 
 const normalizeWorkspacePath = (
   filename: string,
-  specifier: string
+  specifier: string,
+  cwd: string
 ): string | null => {
   if (specifier.startsWith(".")) {
     return path.posix.normalize(
@@ -137,7 +138,7 @@ const normalizeWorkspacePath = (
   }
 
   if (specifier.startsWith("/")) {
-    return workspacePath(specifier);
+    return workspacePath(specifier, cwd);
   }
 
   const workspacePackage =
@@ -157,7 +158,7 @@ const normalizeWorkspacePath = (
   const appPackage = path.posix.join("apps", name, suffix);
   const libraryPackage = path.posix.join("packages", name, suffix);
 
-  if (name === "infra" || existsSync(path.join(repoRoot, "apps", name))) {
+  if (name === "infra" || existsSync(path.join(cwd, "apps", name))) {
     return appPackage;
   }
 
@@ -170,7 +171,7 @@ const importModule = (
   node: ESTree.Node,
   specifier: string
 ) => {
-  const target = normalizeWorkspacePath(filename, specifier);
+  const target = normalizeWorkspacePath(filename, specifier, context.cwd);
 
   if (
     target !== null &&
@@ -211,8 +212,12 @@ const importModule = (
   }
 };
 
-const browserCapabilityModule = (filename: string, specifier: string) => {
-  const target = normalizeWorkspacePath(filename, specifier);
+const browserCapabilityModule = (
+  filename: string,
+  specifier: string,
+  context: RuleContext
+) => {
+  const target = normalizeWorkspacePath(filename, specifier, context.cwd);
 
   if (
     specifier.startsWith("@") &&
@@ -231,9 +236,13 @@ const browserCapabilityModule = (filename: string, specifier: string) => {
   );
 };
 
-const browserServerModule = (filename: string, specifier: string) => {
+const browserServerModule = (
+  filename: string,
+  specifier: string,
+  context: RuleContext
+) => {
   const normalized = specifier.toLowerCase();
-  const target = normalizeWorkspacePath(filename, specifier);
+  const target = normalizeWorkspacePath(filename, specifier, context.cwd);
 
   return (
     isBuiltin(specifier) ||
@@ -248,6 +257,7 @@ const browserServerModule = (filename: string, specifier: string) => {
     normalized.includes("/httpserver") ||
     /(?:^|\/)server(?:\/|$)/u.test(normalized) ||
     /\.server(?:\.[^/]*)?$/u.test(normalized) ||
+    (target !== null && projectLayout(context).buildFiles.includes(target)) ||
     (target !== null && isWithin(target, "apps/infra"))
   );
 };
@@ -883,7 +893,7 @@ const moduleSourceVisitors = (
 
 const noCrossLayerImports = defineRule({
   create(context) {
-    const filename = workspacePath(context.filename);
+    const filename = workspacePath(context.filename, context.cwd);
 
     const report = (node: ESTree.Node, source: ESTree.Expression) => {
       const specifier = isStringModule(source);
@@ -918,7 +928,7 @@ const noCrossLayerImports = defineRule({
 
 const noCoreAdapters = defineRule({
   create(context) {
-    const filename = workspacePath(context.filename);
+    const filename = workspacePath(context.filename, context.cwd);
 
     if (!isWithin(filename, "packages/core/src")) {
       return {};
@@ -931,7 +941,7 @@ const noCoreAdapters = defineRule({
         return;
       }
 
-      const target = normalizeWorkspacePath(filename, specifier);
+      const target = normalizeWorkspacePath(filename, specifier, context.cwd);
 
       const domainModule =
         target !== null &&
@@ -972,9 +982,9 @@ const noCoreAdapters = defineRule({
 
 const noBrowserServerImports = defineRule({
   create(context) {
-    const filename = workspacePath(context.filename);
+    const filename = workspacePath(context.filename, context.cwd);
 
-    if (!isBrowserZone(filename)) {
+    if (!isBrowserZone(filename, projectLayout(context))) {
       return {};
     }
 
@@ -982,11 +992,11 @@ const noBrowserServerImports = defineRule({
       const specifier = isStringModule(source);
 
       if (specifier !== null) {
-        if (browserServerModule(filename, specifier)) {
+        if (browserServerModule(filename, specifier, context)) {
           context.report({ messageId: "serverImport", node });
         }
 
-        if (browserCapabilityModule(filename, specifier)) {
+        if (browserCapabilityModule(filename, specifier, context)) {
           context.report({ messageId: "capabilityImport", node });
         }
       }
@@ -1014,15 +1024,57 @@ const isGlobalFetch = (node: ESTree.Node, scope: Scope | null) =>
   node.name === "fetch" &&
   !isDeclaredLocally("fetch", scope);
 
+const inBrowserEffectBody = (
+  node: ESTree.Node,
+  context: RuleContext
+): boolean => {
+  for (
+    let current: ESTree.Node | null = node;
+    current !== null;
+    current = current.parent
+  ) {
+    if (current.type !== "CallExpression") continue;
+    const callee = unwrapExpression(current.callee);
+    if (callee.type !== "MemberExpression") continue;
+    const method = staticPropertyName(callee);
+    const identity = importIdentity(
+      callee.object,
+      context.sourceCode.getScope(current),
+      context
+    );
+    const command =
+      identity?.module === "@effect/ui" &&
+      identity.name === "Command" &&
+      method === "make";
+    const mount =
+      identity?.module === "@effect/ui" &&
+      identity.name === "Mount" &&
+      (method === "make" || method === "makeStream");
+    if (!command && !mount) continue;
+    const body = current.arguments[2];
+    if (
+      body !== undefined &&
+      body.type !== "SpreadElement" &&
+      (body.type === "ArrowFunctionExpression" ||
+        body.type === "FunctionExpression") &&
+      node.start >= body.start &&
+      node.end <= body.end
+    )
+      return true;
+  }
+  return false;
+};
+
 const noFeatureTransport = defineRule({
   create(context) {
-    const filename = workspacePath(context.filename);
+    const filename = workspacePath(context.filename, context.cwd);
 
-    if (!isFeature(filename)) {
+    if (!isFeature(filename) && !isView(filename, projectLayout(context))) {
       return {};
     }
 
     const report = (node: ESTree.Node) => {
+      if (inBrowserEffectBody(node, context)) return;
       context.report({ messageId: "featureTransport", node });
     };
 
@@ -1069,6 +1121,7 @@ const noFeatureTransport = defineRule({
         report(node);
       },
       ImportDeclaration(node) {
+        if (isView(filename, projectLayout(context))) return;
         for (const specifier of node.specifiers) {
           const name = importedName(specifier);
 
@@ -1164,7 +1217,7 @@ const noFeatureTransport = defineRule({
     },
     messages: {
       featureTransport:
-        "Features cannot use fetch or construct transport clients. Transport, retries, and failures belong in the client program, where update folds the result into the Model. Fix: send a Message and run a named `Command.define` from `apps/web/src/client/<name>/`.",
+        "Features cannot use fetch or construct transport clients. Transport, retries, and failures belong in the client program, where update folds the result into the Model. Fix: send a Message and run a named `Command.make` or a declared Command service from `@effect/ui`.",
     },
     type: "problem",
   },
@@ -1262,7 +1315,7 @@ const surfaceCallName = (
 
 const noHandRolledSurface = defineRule({
   create(context) {
-    const filename = workspacePath(context.filename);
+    const filename = workspacePath(context.filename, context.cwd);
 
     return {
       MemberExpression(node) {
@@ -1338,17 +1391,23 @@ const browserGlobals = new Set([
   "window",
 ]);
 
-const isServerSource = (filename: string) =>
-  /^(?:apps|packages)\/[^/]+\/src\/.+/u.test(filename) &&
-  !isBrowserZone(filename);
+const isServerSource = (filename: string, layout: ProjectLayout) =>
+  isRuntime(filename, layout) &&
+  (!isBrowserZone(filename, layout) || isView(filename, layout));
 
 const noBrowserGlobalsOnServer = defineRule({
   create(context) {
-    if (!isServerSource(workspacePath(context.filename))) {
+    if (
+      !isServerSource(
+        workspacePath(context.filename, context.cwd),
+        projectLayout(context)
+      )
+    ) {
       return {};
     }
 
     const report = (node: ESTree.Node, name: string) => {
+      if (inBrowserEffectBody(node, context)) return;
       context.report({
         data: { name },
         messageId: "browserGlobal",
@@ -1465,13 +1524,15 @@ const mayUseDevtools = (filename: string) =>
 
 const noDevtoolsInProduction = defineRule({
   create(context) {
-    const filename = workspacePath(context.filename);
+    const filename = workspacePath(context.filename, context.cwd);
 
     const check = (node: ESTree.Node, source: ESTree.Expression) => {
       const specifier = isStringModule(source);
 
       const target =
-        specifier === null ? null : normalizeWorkspacePath(filename, specifier);
+        specifier === null
+          ? null
+          : normalizeWorkspacePath(filename, specifier, context.cwd);
 
       if (target === null) {
         return;
@@ -1511,8 +1572,10 @@ const noDevtoolsInProduction = defineRule({
 
 const noCodeSnippetsInRuntime = defineRule({
   create(context) {
-    const filename = workspacePath(context.filename);
-    const runtime = /^(?:apps|packages)\/[^/]+\/src\//u.test(filename);
+    const filename = workspacePath(context.filename, context.cwd);
+    const layout = projectLayout(context);
+    const runtime =
+      isRuntime(filename, layout) && !layout.buildFiles.includes(filename);
 
     const check = (node: ESTree.Node, source: ESTree.Expression) => {
       const specifier = isStringModule(source);
@@ -1521,7 +1584,7 @@ const noCodeSnippetsInRuntime = defineRule({
         return;
       }
 
-      const target = normalizeWorkspacePath(filename, specifier);
+      const target = normalizeWorkspacePath(filename, specifier, context.cwd);
 
       const snippets =
         target !== null && isWithin(target, "packages/code-snippets");

@@ -1,7 +1,7 @@
 import { definePlugin, defineRule } from "@oxlint/plugins";
 import type { ESTree } from "@oxlint/plugins";
 
-const TEST_FILE_PATTERN = /\.(?:test|spec)\.[cm]?[jt]sx?$/u;
+const TEST_FILE_PATTERN = /\.(?:test|spec|vitest)\.[cm]?[jt]sx?$/u;
 
 const EFFECT_RUNTIME_METHODS = new Set([
   "runCallback",

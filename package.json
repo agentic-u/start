@@ -22,6 +22,7 @@
     "lint": "oxlint -c oxlint.config.ts packages/*/src packages/*/test scripts packages/checkers/compiler-parity.test.mjs"
   },
   "devDependencies": {
+    "@agentic-u/fence": "workspace:*",
     "@effect/tsgo": "0.69.0",
     "@types/node": "24.19.2",
     "@yielded/effect-tsrs": "0.2.3",

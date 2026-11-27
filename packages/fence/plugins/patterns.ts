@@ -1,5 +1,4 @@
 // @effect-diagnostics nodeBuiltinImport:off -- This Oxlint plugin runs as Node tooling and reads repository files directly.
-import path from "node:path";
 
 import { definePlugin, defineRule } from "@oxlint/plugins";
 import type {
@@ -27,21 +26,12 @@ type ReturnStatementNode = NodeOfType<"ReturnStatement">;
 
 type FunctionThunk = ESTree.ArrowFunctionExpression | ESTree.Function;
 
-const repoRoot = path.resolve(import.meta.dirname, "../../..");
+import { isRuntime, projectLayout, sourcePath } from "./project.ts";
 
-const workspacePath = (filename: string) => {
-  const relative = path
-    .relative(repoRoot, path.resolve(filename))
-    .split(path.sep)
-    .join("/");
+const workspacePath = sourcePath;
 
-  const match = /(?:^|\/)(?<workspace>(?:apps|packages)\/.+)$/u.exec(relative);
-
-  return match?.groups?.workspace ?? relative;
-};
-
-const isRuntimeSource = (filename: string) =>
-  /^(?:apps|packages)\/[^/]+\/src\/.+/u.test(filename);
+const isRuntimeSource = (filename: string, context: RuleContext) =>
+  isRuntime(filename, projectLayout(context));
 
 const unwrapExpression = (node: ESTree.Expression): ESTree.Expression => {
   if (
@@ -576,7 +566,9 @@ const isSharedConstruction = (node: ESTree.Node, context: RuleContext) => {
 
 const noSharedPendingCache = defineRule({
   create(context) {
-    if (!isRuntimeSource(workspacePath(context.filename))) {
+    if (
+      !isRuntimeSource(workspacePath(context.filename, context.cwd), context)
+    ) {
       return {};
     }
 
@@ -789,7 +781,9 @@ const isModuleScopedVar = (node: ESTree.Node) => {
 
 const noModuleLevelMutableState = defineRule({
   create(context) {
-    if (!isRuntimeSource(workspacePath(context.filename))) {
+    if (
+      !isRuntimeSource(workspacePath(context.filename, context.cwd), context)
+    ) {
       return {};
     }
 
@@ -967,7 +961,9 @@ const sharedWaiterOwner = (
 
 const sharedWaiters = defineRule({
   create(context) {
-    if (!isRuntimeSource(workspacePath(context.filename))) {
+    if (
+      !isRuntimeSource(workspacePath(context.filename, context.cwd), context)
+    ) {
       return {};
     }
 
@@ -1271,7 +1267,9 @@ const variableBinding = (
 
 const watchEffectActors = defineRule({
   create(context) {
-    if (!isRuntimeSource(workspacePath(context.filename))) {
+    if (
+      !isRuntimeSource(workspacePath(context.filename, context.cwd), context)
+    ) {
       return {};
     }
 
@@ -1425,7 +1423,7 @@ const staticLayerOf = (body: ESTree.ClassBody) =>
 
 const learnSnippetIdiom = defineRule({
   create(context) {
-    if (!isLearnSnippet(workspacePath(context.filename))) {
+    if (!isLearnSnippet(workspacePath(context.filename, context.cwd))) {
       return {};
     }
 
@@ -1676,7 +1674,9 @@ const retainNeedsStagePolicy = defineRule({
 
 const noSleepInLoop = defineRule({
   create(context) {
-    if (!isRuntimeSource(workspacePath(context.filename))) {
+    if (
+      !isRuntimeSource(workspacePath(context.filename, context.cwd), context)
+    ) {
       return {};
     }
 
@@ -1791,7 +1791,9 @@ const isMapCallback = (node: ESTree.CallExpression) => {
 
 const noHandRolledHex = defineRule({
   create(context) {
-    if (!isRuntimeSource(workspacePath(context.filename))) {
+    if (
+      !isRuntimeSource(workspacePath(context.filename, context.cwd), context)
+    ) {
       return {};
     }
 

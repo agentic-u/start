@@ -159,7 +159,7 @@ describe("architecture boundary rules", () => {
 
   it("wires browser boundary rules to the feature and client globs", () => {
     const configSource = readFileSync(
-      path.join(repoRoot, "oxlint.config.ts"),
+      path.join(repoRoot, "packages/fence/config.ts"),
       "utf-8"
     );
 

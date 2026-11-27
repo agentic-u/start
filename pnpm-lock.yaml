@@ -201,6 +201,9 @@ importers:
 
   .:
     devDependencies:
+      '@agentic-u/fence':
+        specifier: workspace:*
+        version: link:packages/fence
       '@effect/tsgo':
         specifier: 0.69.0
         version: 0.69.0
@@ -307,7 +310,7 @@ importers:
         version: 7.0.2
 
   packages/fence:
-    devDependencies:
+    dependencies:
       '@oxlint/plugins':
         specifier: 1.94.0
         version: 1.94.0
@@ -317,6 +320,10 @@ importers:
       oxlint:
         specifier: 1.94.0
         version: 1.94.0
+      ultracite:
+        specifier: 8.3.1
+        version: 8.3.1(oxfmt@0.79.0)(oxlint@1.94.0)
+    devDependencies:
       vitest:
         specifier: 5.1.0
         version: 5.1.0(@types/node@24.19.2)(vite@8.3.8(@types/node@24.19.2)(yaml@2.9.1))

@@ -1,17 +1,50 @@
 {
   "name": "@agentic-u/fence",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "license": "MIT",
+  "files": [
+    "dist",
+    "config.ts",
+    "typescript.ts",
+    "effect-tsconfig.json",
+    "plugins",
+    "LICENSE",
+    "ADOPTION.md",
+    "build.mjs"
+  ],
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./config.ts",
+      "import": "./dist/config.js",
+      "default": "./dist/config.js"
+    },
+    "./oxlint": {
+      "types": "./config.ts",
+      "import": "./dist/config.js",
+      "default": "./dist/config.js"
+    },
+    "./typescript": {
+      "types": "./typescript.ts",
+      "import": "./dist/typescript.js",
+      "default": "./dist/typescript.js"
+    },
+    "./tsconfig": "./effect-tsconfig.json"
+  },
   "scripts": {
     "test": "vitest run",
-    "test:integration": "vitest run test/integration.test.ts"
+    "test:integration": "vitest run test/integration.test.ts",
+    "build": "node build.mjs",
+    "prepack": "node build.mjs"
   },
-  "devDependencies": {
+  "dependencies": {
     "@oxlint/plugins": "1.94.0",
     "effect": "4.1.5",
     "oxlint": "1.94.0",
+    "ultracite": "8.3.1"
+  },
+  "devDependencies": {
     "vitest": "5.1.0"
   }
 }
