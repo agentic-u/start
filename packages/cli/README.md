@@ -1,5 +1,7 @@
 # AgenticU CLI
 
+This is a staff interface. The person asks for work in conversation; their agent operates these commands, inspects the receipts and brings back results or concrete questions requiring their input or approval. The person never needs to run commands, prepare input files or interpret CLI output. Examples below are for agents and engineers. See DESIGN.md, "The CLI is a staff interface".
+
 Use `au find`, `au read <id>`, `au read <workflow-id> --step <step-id>` and `au needs <workflow-id>`. Find returns workflow inputs/outputs plus matching curriculum, runbooks and source documents. Needs preserves conditional requirements, human decisions, outward effects, limits and explicit unknowns. `ready` plans against claimed IDs only; its result does not verify any local tools.
 
 The public source defaults to https://agenticu.surf/catalog.json. Pass `--catalog <generated-file-or-url>` to select a source. The runtime uses Node 26.13.1; this package does not install Node or change the Python bootstrap. `--house <directory>` selects private local storage and defaults to the current directory. It never sends that directory, bindings, account choices or progress to the public catalog.
