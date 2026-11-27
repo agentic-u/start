@@ -24,6 +24,7 @@ import { Command, Flag } from "effect/cli";
 import { HttpRouter } from "effect/http";
 import { HttpApiBuilder } from "effect/http-api";
 
+import { inputCall } from "./input-call.js";
 import { operations, SandboxLive } from "./registry.js";
 import { operationWatch, withLocalTrace } from "./trace.js";
 
@@ -95,6 +96,18 @@ const commands = operations.map((operation) => {
     Command.provideEffect(JobsStorage, jobsStorage)
   );
 });
+
+const call = inputCall.pipe(
+  // @effect-diagnostics-next-line unstableApiUsage:off -- Official file command catalog context pinned to Effect 4.1.5.
+  Command.provideEffect(CatalogStore, store),
+  // @effect-diagnostics-next-line unstableApiUsage:off -- Official file command private house context pinned to Effect 4.1.5.
+  Command.provideEffect(
+    House,
+    root.pipe(Effect.map(({ house }) => ({ directory: house })))
+  ),
+  // @effect-diagnostics-next-line unstableApiUsage:off -- Official file command private job context pinned to Effect 4.1.5.
+  Command.provideEffect(JobsStorage, jobsStorage)
+);
 
 // @effect-diagnostics-next-line unstableApiUsage:off -- Official MCP host command pinned to Effect 4.1.5.
 const mcp = Command.make("mcp", {}, () =>
@@ -171,7 +184,14 @@ const openapi = Command.make("openapi", {}, () =>
 
 const app = root.pipe(
   // @effect-diagnostics-next-line unstableApiUsage:off -- Official subcommand composition pinned to Effect 4.1.5.
-  Command.withSubcommands([...commands, mcp, serve, catalogCommand, openapi])
+  Command.withSubcommands([
+    ...commands,
+    call,
+    mcp,
+    serve,
+    catalogCommand,
+    openapi,
+  ])
 );
 
 // @effect-diagnostics-next-line unstableApiUsage:off -- Official Node host services pinned to Effect platform-node 4.1.5.
@@ -209,6 +229,7 @@ const program = Command.runWith(app, { version: "0.1.0" })(
     SandboxError: writeFailure,
     TraceError: writeFailure,
     JobError: writeFailure,
+    InputCallError: writeFailure,
   })
 );
 
