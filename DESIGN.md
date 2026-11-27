@@ -64,3 +64,19 @@ Git is local main, no global identity changes, no remote or automatic business-d
 - Existing AgenticU draft bootstrap 2026-11-26.2 supplied the owner conversation. Original synthetic Mac run proved business folder, exact source saving, 21 matched drafts and completed-session return; exposed missing early-interruption instructions and manual project handoff. This repository replaces the bootstrap delivery for new tests; historical evidence remains with the original lab.
 
 No third-party source code is copied into this repository. Python's filesystem, subprocess and JSON primitives cover the small local boundary; a framework would add prerequisites without improving this caller.
+# Source-fitted profitability and reporting surfaces
+
+The profitability capability recovers the original DentiWise operating method:
+native receipts, proved acquisition joins, chronological refunds/upsells,
+package/parcel costs, covered versus unknown inputs and pooled hierarchy tables.
+It does not distribute the private business's accounts, rates or collector as a
+universal adapter. Existing Spellbook Numbers from release 0.1.1 is optional when
+its explicit window/coverage contract fits. Source-specific calculations stay
+with the business. The companion canvas capability acquires official tldraw
+office separately and uses its live local API, without bundling proprietary app
+code or forcing a new agent framework.
+
+Two fresh Sol low contexts exercised fictional raw exports with complete and
+partial analytics coverage. A saved tldraw office 1.25.0 board exercised calculated
+and uncalculated scenario inputs. These qualify those bounded paths, not live
+merchant connectors, clean desktop installation or universal profitability.

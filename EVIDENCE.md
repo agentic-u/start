@@ -144,3 +144,35 @@ all three hosted download bytes. Hosted browser visual QA was not performed;
 the earlier browser exercise covered the local runtime only. Both native runs and
 first download outputs remain private. No ten-minute, new-owner paid-commerce,
 human acceptance or customer-outcome qualification is inferred from this case.
+# Source-fitted ad contribution and canvas, 2026-11-27
+
+Two new GPT-6.1-Sol low contexts received the candidate starter, a fictional
+founder's request and original fictional provider exports, without previous
+conversation or private implementation checkouts. The first reconciled native
+receipts with ad/journey identities, retained a delayed linked upsell and refund,
+excluded a warehouse duplicate and counted shared parcel cost once. Independently
+recomputed attributed contribution was $51/$13/-$20 by ad, $44 after all media.
+It kept $70 unassigned and a missing SKU cost unresolved; complete business and
+per-ad profitability remained unavailable. The negative attributed subset was
+not promoted to proof that the ad made no sales. Frontend-only, linked-basket,
+break-even and explicit reserve/support/target scenarios stayed distinct.
+
+The second context received incomplete analytics coverage. It correctly retained
+the remaining joins as unknown, not proved absent, conserved $150 unassigned
+gross and declined a complete profitability ranking. Neither run used live
+merchant APIs or establishes new-founder acceptance. The calculations are fitted
+to these exports, not a universal source adapter. Original sources, complete
+native runs and calculated outputs are retained privately by the owning Start
+experiment.
+
+An actual new local tldraw office 1.25.0 document renders the full supplied
+hierarchy, source clocks/lineage, unknowns and scenario controls. An actual UI
+selection of the calculated $2.50 unit-cost scenario changed contribution from
+$44 to $41.50 without changing observed gross. An arbitrary uncalculated $4.25
+input remained visibly pending and did not fabricate a result. Base was restored
+and the board saved through the app API. Calculations remained outside the canvas.
+Calculated selection persists; unsubmitted drafts/pending notices are client
+state unless explicitly persisted for handoff. The existing installed app was
+reused: clean installation, other OSes, live provider refresh and principal
+acceptance were not exercised. Public acquisition instructions cite the official
+app distribution and current documentation; proprietary app code is not bundled.

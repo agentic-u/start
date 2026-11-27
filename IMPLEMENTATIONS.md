@@ -26,6 +26,8 @@ state privately when provider operations use them.
 
 | Outcome | Agent method | Implementation |
 | --- | --- | --- |
+| Report source-qualified ad economics with explicit missing joins and costs | [Ad profitability](capabilities/report-ad-profitability/SKILL.md) | Source-specific agent fitting; optional installed Numbers Window primitives, not a universal native collector |
+| Compose reporting tables and scenario inputs in a shared canvas | [Reporting canvas](capabilities/work-with-reporting-canvas/SKILL.md) | Official tldraw office app + its live API; separate licensed installation |
 | Exercise an offer → checkout → inbox → report/refund locally | [Business composition](capabilities/launch-measured-funnel/implementation.md) | `spell`; new-owner hosted deployment has an unresolved isolation gap |
 | Compile and exercise a funnel with persisted intake and first-party tracking | [Funnel runtime](capabilities/launch-measured-funnel/implementation.md#funnel-runtime) | `funnel` |
 | Make a recorded session searchable and cuttable | [Work with recordings](capabilities/work-with-recordings/SKILL.md) | `tape` |
