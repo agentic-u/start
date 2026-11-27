@@ -1,0 +1,29 @@
+{
+  "name": "@agentic-u/cli",
+  "version": "0.1.0",
+  "bin": {
+    "au": "dist/main.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "tsc -p tsconfig.json",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@agentic-u/catalog": "workspace:*",
+    "@agentic-u/house": "workspace:*",
+    "@agentic-u/jobs": "workspace:*",
+    "@agentic-u/operations": "workspace:*",
+    "@effect/platform-node": "4.1.5",
+    "effect": "4.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2"
+  }
+}

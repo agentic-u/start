@@ -1,0 +1,11 @@
+# AgenticU CLI
+
+Use `au find`, `au read <id>`, `au read <workflow-id> --step <step-id>` and `au needs <workflow-id>`. Find returns workflow inputs/outputs plus matching curriculum, runbooks and source documents. Needs preserves conditional requirements, human decisions, outward effects, limits and explicit unknowns. `au ready <workflow-id> --have '["need-id"]'` plans against claimed IDs only; its result does not verify any local tools.
+
+The public source defaults to https://agenticu.surf/catalog.json. Pass `--catalog <generated-file-or-url>` to select a source. The runtime uses Node 26.13.1; this package does not install Node or change the Python bootstrap. `--house <directory>` selects private local storage and defaults to the current directory. It never sends that directory, bindings, account choices or progress to the public catalog.
+
+`au mcp` exposes the same operation objects on standard input/output. `au serve --port 3000` serves HTTP on loopback only. `au openapi` and `au catalog` describe contracts without fetching catalog content. The registry also includes local fitting, bundle acquisition, progress and durable jobs. Use `<command> --help` for the generated flags; structured fields such as `--selection`, `--command`, `--standard` and `--have` take JSON. Acceptance and job decisions default to denied. An explicit CLI `--yes` approves that invocation through the donor approval gate.
+
+`au execute '<program>'` runs the adopted Rat Stack subprocess sandbox with only the four public catalog operations available as `tools.find/read/needs/ready`. This scope deliberately excludes private state and principal decisions. Limits are 32 calls, 262144 output bytes and five seconds. The program is an async function body returning JSON; `console.log` is captured. For example, a program can find a workflow and then read it in one invocation. This is actual bounded execution, not an assertion that a downloaded skill is safe.
+
+Set `AU_TRACE=/local/path/operations.jsonl` to append completed Effect operation spans when the host exits, including graceful interruption cleanup. Records contain operation name, runtime revision, catalog generation when loaded, success/failure and elapsed nanoseconds. Inputs, output content, principal records and error causes are excluded. The file is local, created with mode 0600; no telemetry is sent.

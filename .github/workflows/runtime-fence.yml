@@ -1,0 +1,24 @@
+name: runtime fence
+on: [push, pull_request]
+jobs:
+  fence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lockfile:check
+      - run: pnpm env:check
+      - run: pnpm check
+        env:
+          LANDMINES_BASE: ${{ github.event.pull_request.base.sha || '' }}
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm acceptance:cold-install
+      - run: python3 -m unittest discover -s tests -v

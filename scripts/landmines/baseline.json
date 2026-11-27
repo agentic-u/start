@@ -1,0 +1,100 @@
+{
+  "packages/operations/test/execute-failure.test.ts": [
+    {
+      "budget": [
+        "test",
+        [
+          "generated programs succeed or fail consistently through HTTP, MCP, RPC, and CLI"
+        ],
+        "timeout",
+        "30000"
+      ],
+      "reason": "Twelve generated programs traverse four real transport adapters and subprocess sandboxes; this bounds the full property run rather than retrying a failed assertion."
+    }
+  ],
+  "packages/operations/test/sandbox-lifetime.test.ts": [
+    {
+      "budget": [
+        "test",
+        [
+          "sandbox lifetime",
+          "escalates scope close and kills resistant descendants"
+        ],
+        "timeout",
+        "15000"
+      ],
+      "reason": "Scope release waits for escalation and observed descendant death; an outer deadline prevents a broken process cleanup from hanging the suite."
+    },
+    {
+      "budget": [
+        "test",
+        [
+          "sandbox lifetime",
+          "escalates interruption and kills resistant descendants"
+        ],
+        "timeout",
+        "15000"
+      ],
+      "reason": "Interruption waits for actual resistant child termination after escalation; the test deadline bounds cleanup failure."
+    },
+    {
+      "budget": [
+        "test",
+        ["sandbox lifetime", "exits on stdin EOF"],
+        "timeout",
+        "15000"
+      ],
+      "reason": "EOF proof launches a real child and observes its exit, with an outer deadline for a child that never responds."
+    },
+    {
+      "budget": [
+        "test",
+        [
+          "sandbox lifetime",
+          "bounds a synchronous infinite loop inside the child"
+        ],
+        "timeout",
+        "15000"
+      ],
+      "reason": "The intentionally infinite VM program must be killed by its runtime bound; the outer test deadline catches failure of that kill path."
+    },
+    {
+      "budget": [
+        "test",
+        [
+          "sandbox lifetime",
+          "enforces a child-side wall clock without a caller"
+        ],
+        "timeout",
+        "15000"
+      ],
+      "reason": "The isolated child must self-terminate without caller cancellation; the deadline bounds a failed child-side watchdog."
+    },
+    {
+      "budget": [
+        "test",
+        [
+          "sandbox lifetime",
+          "survives SIGKILL of its parent without an orphan"
+        ],
+        "timeout",
+        "15000"
+      ],
+      "reason": "A real parent receives SIGKILL and the test observes orphan cleanup; the deadline bounds an unreaped process."
+    }
+  ],
+  "packages/operations/test/sandbox-orphan.test.ts": [
+    {
+      "budget": [
+        "test",
+        [
+          "sandbox parent lifetime",
+          "`exits after SIGKILL of its parent while ${ name }`"
+        ],
+        "timeout",
+        "15000"
+      ],
+      "reason": "Separate-process fixtures kill the parent during multiple execution states and observe child exit; the deadline prevents an orphan regression hanging the runner."
+    }
+  ]
+}

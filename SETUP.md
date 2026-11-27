@@ -14,6 +14,8 @@ Reuse existing repositories in place when the owner points to them. Inspect stat
 
 ## Codex and T3
 
+The public AgenticU runtime uses the local installer in RUNTIME.md for both existing-agent and fresh-setup entry. Its pinned Node fallback lives inside `.agenticu/runtime`; do not install Node globally or replace existing agent configuration to satisfy that runtime. Record runtime installation separately from effective provider settings.
+
 The template `.codex/config.toml` sets only GPT-6.1-Sol, low reasoning and live web search. It is project-local and does not contain sign-in state. Codex may ignore project config until the person trusts the folder; do not silently change trust. A T3-selected model can override the file. Verify the current thread model through T3's configuration or CLI readback. Preserve sandbox, approvals, accounts, other MCP servers and existing user preferences.
 
 Read effective defaults with `python3 tools/codex_settings.py --binary ABSOLUTE_CODEX --root BUSINESS_ROOT`. It uses Codex's supported app-server config/read API and prints only these three settings and their source layers. When the owner asks for setup defaults, `--fill-user-defaults` fills only absent values through config/batchWrite in user config, preserving explicit existing values and all other keys. This makes missing defaults available without silently trusting the project. Tell the owner these become defaults for new Codex sessions in this account; current T3 thread choices still win. Do not use this option to replace a different existing preference. No approval/sandbox/trust or sign-in settings are written.

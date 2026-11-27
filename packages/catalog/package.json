@@ -1,0 +1,47 @@
+{
+  "name": "@agentic-u/catalog",
+  "version": "0.1.0",
+  "files": [
+    "dist",
+    "PROVENANCE.md"
+  ],
+  "type": "module",
+  "exports": {
+    "./workflow": {
+      "types": "./dist/domain/workflow.d.ts",
+      "import": "./dist/domain/workflow.js"
+    },
+    "./laws": {
+      "types": "./dist/domain/laws.d.ts",
+      "import": "./dist/domain/laws.js"
+    },
+    "./library": {
+      "types": "./dist/domain/library.d.ts",
+      "import": "./dist/domain/library.js"
+    },
+    "./ready": {
+      "types": "./dist/domain/ready.d.ts",
+      "import": "./dist/domain/ready.js"
+    },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@agentic-u/operations": "workspace:*",
+    "@effect/platform-node": "4.1.5",
+    "effect": "4.1.5"
+  },
+  "devDependencies": {
+    "@effect/vitest": "4.1.5",
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  }
+}

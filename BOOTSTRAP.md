@@ -12,6 +12,8 @@ If a workspace already has `.agenticu/workspace.json`, use its status/checkpoint
 
 ## Prepare the workspace and hand it over
 
+Existing agents and fresh setups share the public runtime entry in RUNTIME.md. Install its official nine-package release with `python3 tools/runtime.py install --release RELEASE_DIRECTORY --house BUSINESS_ROOT` after the business folder exists. Use the returned local node and CLI paths; a website source checkout and global Node installation are not prerequisites. Keep runtime installation separate from provider readiness and business progress.
+
 1. Clone https://github.com/agentic-u/start into `~/.local/share/agentic-u/start` if absent. If present, inspect its remote and local changes; reuse it, do not reset it. Record the actual commit followed. Public tools stay outside the business folder.
 2. Run `python3 tools/workspace.py init --name 'Business name'` from that checkout. It makes `~/AgenticU/<business-name>/`, local Git main, a Codex defaults file, supported t3.json, source files, checkpoint journal, instructions and projects/repos folders. Names in commands must be passed as arguments, never evaluated as shell code.
 3. Save the owner's exact ready/name answers using `answer --root ABSOLUTE_ROOT --file ANSWER_FILE`. Use the agent's file-writing tool to create the answer file; do not put payloads in shell commands. It is fine to use a temporary file and remove it afterward. Read status to verify the source saved.

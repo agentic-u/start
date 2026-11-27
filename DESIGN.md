@@ -6,6 +6,8 @@ Distinguishing failure: after saving the first story, kill the conversation befo
 
 ## Interfaces
 
+The common runtime entry is `python3 tools/runtime.py install --release DIRECTORY --house BUSINESS_ROOT`. The public bundle's `manifest.json` admits nine unique tarball basenames plus required `package.json` and `package-lock.json` install files and their SHA256 values once. All eleven files are copied to the manifest-specific runtime prefix before `npm ci` installs the release's locked dependencies. Runtime artifacts live under `.agenticu/runtime`, with an interruption checkpoint and absolute node/CLI paths. Node 26.13.1 is downloaded from nodejs.org with its official SHA256 list only when a compatible Node 26/npm pair is absent. No website checkout, global installation, agent configuration replacement or onboarding-completion claim follows from installing tools. RUNTIME.md defines the bundle and receipt.
+
 Agent reads BOOTSTRAP.md, clones this public repository into a separate tools folder and uses Python 3's standard library (no pip dependencies):
 
 ```

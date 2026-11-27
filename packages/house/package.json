@@ -1,0 +1,37 @@
+{
+  "name": "@agentic-u/house",
+  "version": "0.1.0",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@agentic-u/bundles": "workspace:*",
+    "@agentic-u/catalog": "workspace:*",
+    "@agentic-u/local": "workspace:*",
+    "@agentic-u/operations": "workspace:*",
+    "@agentic-u/progress": "workspace:*",
+    "effect": "4.1.5"
+  },
+  "devDependencies": {
+    "@effect/vitest": "4.1.5",
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  },
+  "engines": {
+    "node": "26.13.1"
+  }
+}
