@@ -205,3 +205,54 @@ API or principal acceptance is inferred. Complete T3 messages, native provider
 rollout and business artifacts are privately retained outside the helper; the
 owning coordinator verifies their archive before any clearing. No AU runtime,
 private SDK checkout or recipient audit assignment was required.
+
+## Common commerce sources and managed-import replica, 2026-11-27
+
+Two fresh Sol-low contexts in the Atlas helper used public starter `4d847f0` and
+original fictional sources without the earlier report or conversation. The main
+world exposed Shopify paginated nested records, Stripe charges/balance/refunds,
+PayPal captures, GA4, Klaviyo, ShipStation/3PL, supplier rates and a native ad
+reference through ordinary local service interfaces. A stateful PostHog replica
+provided organization/project creation, managed-style Meta OAuth consent and
+single-use callback, account grants, account-specific sources, delayed imports,
+table/query freshness and event capture. It is a documented local API subset,
+not the vendors' code or new live-provider OAuth proof. Actual historical managed
+imports supplied source lineage; direct Meta MCP authentication is separate.
+
+The recipient preserved the personal project, created a separate free organization
+and project, connected only the two owned ad accounts, repaired partial initial
+imports and reconciled fresh queries to native spend. Its source fitter separated
+tax from retained shipping revenue, avoided store/payment/analytics duplication,
+kept the later refund and shared parcel once, and retained the unknown SKU cost
+and missing order-to-ad relation. Independently checked estimates were $31.45 and
+$12.40 for verified baskets, $23.85 after all $130 media against linked revenue.
+Complete business/per-ad profit remained unavailable.
+
+One mock-fidelity error was assisted: the coordinator corrected Stripe's fully
+refunded flag on a partial refund and added explicit capture fields, preserving
+original bytes and the earlier run. The recipient retained its first download,
+refetched and reconciled the correction; monetary results stayed unchanged. This
+is not a claim that the recipient independently detected that fixture error.
+
+Actual helper-browser QA observed no capture before consent, three marked events
+after consent, and no further capture after withdrawal. Destination records kept
+matching journey/ad identities. New QA did not backfill historical visits. Paid
+purchase capture is unqualified because the provided site has no paid checkout.
+The interactive report exercised filters/scenarios on desktop/mobile. A later
+one-file export passed actual file:// Chrome opening with networking disabled,
+embedded data, working CPA controls and no external requests/page errors. The
+unserved intermediate build was not that offline artifact. Native coordinator
+Chrome input was refused by Atlas's focus guard; it is not a pointer-path pass.
+
+The other context independently fitted WooCommerce/Stripe/Google Ads and Amazon
+order/finance/Sponsored Products exports. It converted spend micros, conserved
+overlapping money, retained partial coverage and missing joins/costs, distinguished
+fractional/aggregate ad credit from native transactions, and withheld ad profit
+while returning useful payment and settlement bridges. No new software was needed.
+
+Full T3/native runs, original/corrected sources and service state are retained
+privately outside the helper. The local world source is owned in Start's Atlas
+commerce-world folder; its HTTP tests check state/grant/pagination/cache/capture
+contracts, not human acceptance or live connector compatibility. Draft-2 source
+setup guidance captures these lessons; the recipients used the earlier pin and
+discovered the service paths themselves. No mandatory AU runtime was introduced.

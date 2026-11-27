@@ -8,7 +8,7 @@ The person names what they want. This repository supplies reusable methods, requ
 
 | Request | Agent instructions | Status |
 | --- | --- | --- |
-| Understand ad profitability, attribution gaps, package economics and allowable CPA | [Report ad profitability](capabilities/report-ad-profitability/SKILL.md) | Draft-1 adapts the operating DentiWise method, with source-specific fitting; qualification is recorded in EVIDENCE.md. |
+| Understand ad profitability, attribution gaps, package economics and allowable CPA | [Report ad profitability](capabilities/report-ad-profitability/SKILL.md) | Draft-2 includes source acquisition, requested PostHog/Meta setup and source-specific fitting; qualification is recorded in EVIDENCE.md. |
 | Build reporting tables and explicit scenario inputs with the principal in tldraw | [Work with a reporting canvas](capabilities/work-with-reporting-canvas/SKILL.md) | Draft-1; official app acquisition and existing-app reuse, private reporting data and durable board behavior. |
 | Make a recorded session searchable and cuttable; export an authored edit | [Work with recordings](capabilities/work-with-recordings/SKILL.md) | Draft-1 connects the existing tape implementation; see EVIDENCE.md for consumer qualification. An editor timeline is not a rendered video. |
 | Compose and exercise a branching customer journey | [Compose a customer journey](capabilities/compose-customer-journey/SKILL.md) | Draft-1 connects the existing journey library; routing simulation is distinct from provider execution. |

@@ -3,7 +3,7 @@ name: report-ad-profitability
 description: Explain what ads actually contribute using native spend, merchant receipts, exact attribution, product and parcel economics, source coverage and explicit estimates. Build the founder's tables and scenarios; identify when missing joins make per-ad conclusions unavailable.
 compatibility: A file-capable agent with authorized access to the owner's actual advertising, analytics, commerce and cost sources, or original exports. No fixed vendor, AU runtime, warehouse or general onboarding is required.
 metadata:
-  revision: "draft-1"
+  revision: "draft-2"
 ---
 
 # Find what the ads actually contribute
@@ -16,6 +16,11 @@ make the founder fill a technical checklist or maintain a reporting ledger.
 
 [Existing implementations](IMPLEMENTATION.md) are available where their actual
 contract fits. They are building blocks, not proof that a new merchant's joins exist.
+
+When the sources need acquiring or connecting, use [source fitting and setup](CONNECT-SOURCES.md).
+Find current native methods rather than requiring prejoined exports. This includes
+PostHog setup, managed Meta OAuth imports and honest new website measurement when
+the principal has requested them.
 
 Recover the economic boundary, dates and intended decision: merchant, affiliate or
 integrated business; sale-period or acquisition cohort; historical observed result

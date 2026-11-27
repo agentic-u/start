@@ -87,3 +87,12 @@ Its local pure scenario model avoids a server solely for arithmetic; source
 fitting and observations remain separate. Exact-document app-API input checks
 passed; duplicate restored test-window titles blocked native pointer targeting.
 EVIDENCE.md retains that distinction rather than claiming a complete desktop path.
+
+Source fitting now includes requested PostHog tenant/measurement setup and managed
+Meta imports, separately from direct Meta MCP authentication. The guidance derives
+from retained real import receipts, current official contracts and fresh Atlas
+replica and alternate export cases. It preserves order/payment/settlement/event meaning
+instead of introducing a universal prejoined finance schema. New tracking cannot
+repair unrecorded history, and a connected source is not a fresh reconciled report.
+The source-specific fitter and interactive/offline result remain with the business;
+reusable acquisition knowledge stays in the profitability capability.

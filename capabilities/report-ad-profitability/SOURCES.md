@@ -54,3 +54,12 @@ the joins, currentness and cost semantics an arbitrary business needs.
 Candidate publication qualification belongs in EVIDENCE.md. A fictional regression
 tests reasoning under declared sources; real new-account access, native API codecs,
 production accounting and customer acceptance remain separate facts.
+
+Source-connection guidance additionally draws on the actual 2026-10-07 managed
+Meta import proof and 2026-10-08 schema readback in Foundation3's performance-commerce
+evidence, plus the retained commerce integration and current reporting runbook.
+These establish dated operating observations, not a fresh new-owner consent.
+Current official source/setup, Shopify, Stripe, PayPal, WooCommerce, GA4, Google Ads
+and Amazon finance documentation was checked on 2026-11-27; CONNECT-SOURCES.md
+uses their source meanings without claiming one universal decoder. In particular,
+PostHog-managed Meta OAuth and direct Meta MCP OAuth are independent integrations.
