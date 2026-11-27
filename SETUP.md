@@ -14,7 +14,7 @@ Reuse existing repositories in place when the owner points to them. Inspect stat
 
 ## Codex and T3
 
-The public AgenticU runtime uses the local installer in RUNTIME.md for both existing-agent and fresh-setup entry. Its pinned Node fallback lives inside `.agenticu/runtime`; do not install Node globally or replace existing agent configuration to satisfy that runtime. Record runtime installation separately from effective provider settings.
+The AgenticU runtime/CLI is not part of bootstrap setup. Do not install it or follow RUNTIME.md unless the person explicitly asks to work with that runtime. Repository capabilities use the agent's existing tools. Do not install Node globally or replace agent configuration to satisfy an unnecessary runtime prerequisite.
 
 The template `.codex/config.toml` sets only GPT-6.1-Sol, low reasoning and live web search. It is project-local and does not contain sign-in state. Codex may ignore project config until the person trusts the folder; do not silently change trust. A T3-selected model can override the file. Verify the current thread model through T3's configuration or CLI readback. Preserve sandbox, approvals, accounts, other MCP servers and existing user preferences.
 

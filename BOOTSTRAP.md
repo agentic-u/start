@@ -1,6 +1,20 @@
 # Set up and start working
 
-Release 0.1.0. Read this whole page before acting. The person asked you to read this repository and set them up; the repository supplies the method, while the person supplies authority and business facts.
+Read this whole page before acting. The repository supplies methods and setup guidance; the person's actual request supplies intent and authority. Reading the repository is not automatically a request to install tools or repeat onboarding.
+
+## Route from the request and existing state
+
+Use this repository as the front door for setup and later work. Inspect or obtain its actual files, preserve an existing checkout's changes and record the commit followed. Follow relative links within that same revision; do not silently mix remote latest files with a different local release.
+
+Prior AgenticU onboarding is not required. Someone can arrive with a concrete job, an existing business and any mix of prepared or missing tools/access. Inspect what the requested method actually needs, reuse what is usable and resolve its missing prerequisites progressively. An existing laptop does not establish browser pairing, account access, local business understanding or a capability lock. Do not run the general onboarding interview as a gate to useful work.
+
+- **A current job in an existing business:** use its established workspace and sources. Read CAPABILITIES.md, select a relevant method and follow its requirements and local fitting instructions. Read relevant prior work; do not require a full business interview, a new folder or `.agenticu/workspace.json`. Ask which workspace only when the request and environment do not establish it. The workspace initialization tool is for new onboarding, not a way to adopt existing files.
+- **An interrupted or returning session:** recover its saved state. A new concrete request takes precedence over a generic “what changed?” question; preserve unrelated unfinished work. Resume onboarding only if that is the active request.
+- **A request for setup with no established workspace:** follow the setup session below. Install only the prerequisites needed for that path and reuse working tools/accounts. Business account access and outward authority remain separate from harness setup.
+
+The current AgenticU runtime/CLI is not required for any path on this page. Do not install it, route through RUNTIME.md or invoke it just because an old runtime receipt exists. RUNTIME.md documents a separate engineering tool; use it only for an explicit request to work with that runtime. Business capabilities are available as files in this repository and run through the agent's existing authorized tools.
+
+The rest of this page describes the **new-workspace setup session**, not a mandatory prelude to each business job.
 
 ## Start where they are
 
@@ -12,7 +26,7 @@ If a workspace already has `.agenticu/workspace.json`, use its status/checkpoint
 
 ## Prepare the workspace and hand it over
 
-Existing agents and fresh setups share the public runtime entry in RUNTIME.md. Install its official nine-package release with `python3 tools/runtime.py install --release RELEASE_DIRECTORY --house BUSINESS_ROOT` after the business folder exists. Use the returned local node and CLI paths; a website source checkout and global Node installation are not prerequisites. Keep runtime installation separate from provider readiness and business progress.
+Use the repository's Python workspace/checkpoint tools for new onboarding. No AgenticU runtime installation is needed. Existing business work follows the capability route above rather than this initialization sequence.
 
 1. Clone https://github.com/agentic-u/start into `~/.local/share/agentic-u/start` if absent. If present, inspect its remote and local changes; reuse it, do not reset it. A clean checkout behind its tracked upstream can fast-forward; preserve local changes and report the actual revision when it cannot. Record the actual commit followed. Public tools stay outside the business folder.
 2. Run `python3 tools/workspace.py init --name 'Business name'` from that checkout. It makes `~/AgenticU/<business-name>/`, local Git main, a Codex defaults file, supported t3.json, source files, checkpoint journal, instructions and projects/repos folders. Names in commands must be passed as arguments, never evaluated as shell code.
@@ -42,7 +56,7 @@ Use checkpoint phases listening, source, review and bind to match the real conve
 
 ## Make one useful thing and return
 
-Choose one action together that addresses the underlying obstacle and can start with the available files and tools. Ask before starting. Save phase first_action and the exact authorization. Produce and show the first usable result: a reviewed queue, a draft, an analysis or another thing this owner can actually use. Preparing messages does not authorize sending them. Install or connect additional tools only when needed and authorized.
+Choose one action together that addresses the underlying obstacle and can start with the available files and tools. Read CAPABILITIES.md and use the relevant repository method when it fits. Ask before starting a newly proposed action; an already explicit request does not need to be asked again. Save phase first_action and the exact authorization. Produce and show the first usable result: a reviewed queue, a draft, an analysis or another thing this owner can actually use. Preparing messages does not authorize sending them. Install or connect additional tools only when needed and authorized.
 
 Update picture.md, business.json and log.md with what was made, what was approved and what remains unknown. Record result paths. Set phase complete only when the first result is shown and the closing state is saved. Tell the owner: "Your business project is open in T3. Next time, start a thread in it and say carry on." Verify that the project actually exists before saying this.
 

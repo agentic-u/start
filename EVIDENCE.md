@@ -1,5 +1,15 @@
 # Qualification record
 
+## Repository capability routing, 2026-11-26
+
+README, BOOTSTRAP, SETUP and newly generated workspace instructions route from the actual request and existing state. Prior AgenticU onboarding is not required for an existing-business job. The repository now carries the draft recovery skill and its requirement/local-fitting references through CAPABILITIES.md. Automatic installation/use of the current runtime is removed; RUNTIME.md remains a separately requested engineering interface. Existing business instructions were not rewritten.
+
+`pnpm check`, `pnpm test` and `pnpm acceptance:cold-install` passed through the pinned mise environment. Python ran 13 checks with the optional native configuration test skipped because CODEX_TEST_BINARY was unset. The upstream Agent Skills reference validator accepted the relocated skill. The cold-install result concerns the retained engineering package, not a fresh-agent exercise of this new routing.
+
+No Atlas session, fresh recipient arrival or interrupted-agent run was performed for this change. Prior run evidence below remains historical; it does not qualify the newly authored sales method, file-based fitting protocol or no-runtime arrival journey. Their actual recipient qualification remains to be done.
+
+## Earlier setup qualification
+
 2026-11-26. One synthetic macOS account-isolation run, Codex GPT-6.1-Sol low. This is developer qualification, not a customer's acceptance or a business result. Raw conversation, screenshots and account-specific paths are retained privately; no credentials or personal configuration are published here.
 
 ## Public URL and automatic handoff
