@@ -107,3 +107,40 @@ Actual PostHog project creation was rejected because the selected organisation r
 At a subsequent checkpoint the owner approved a new isolated organisation. Actual creation/settings readback, owner-side Worker configuration and destination queries established ingestion without copying administrative authentication into the recipient. A frozen native snapshot held 34 lab occurrences: 12 consented events matched destination UUID, name, session identity, original timestamp, hashed submission identity and offer revision; 22 declined-consent events had no projection attempts or destination records. A cached destination query still showed only six rows; a documented forced refresh returned the complete twelve. Query clock/cache metadata and both answers were preserved.
 
 An explicit owner-side replay then sent one existing occurrence twice with unchanged identity/timestamp. A fresh destination query exposed 13 stored rows for 12 distinct occurrences, including two copies of that event. The provider's [documented deduplication is eventual](https://posthog.com/docs/data/events): raw SQL and insights can count copies before background merges. An actual query at the full documented deduplication grain returned the twelve distinct occurrences while retaining the extra raw projection. This does not qualify immediate exactly-once ingestion. Measure draft-2 captures that work-taught distinction and query freshness; its new instructions are not retroactively the earlier recipient's source revision. Saved analysis, the full worked-service release and broader commercial qualification remain unfinished.
+## Existing implementation connection, 2026-11-27
+
+A fresh GPT-6.1-Sol low context received only the candidate starter checkout,
+an original fictional Meeting Reset Kit request, its private workspace and bounded
+access scope. It did not read the private Spellbook checkout or prior conversation.
+It acquired the actual public 0.1.0 implementation archive, built four Books pages
+and three useful downloadable files, and used the existing Worker/D1 runtime.
+Its browser exercised offer → kit → optional contact → saved confirmation at a
+390px viewport. Downloads returned 200; persisted fictional contact, invalid-email
+400, conflicting-write 409 and zero subscriptions/queued mail were observed.
+Independent coordinator downloads matched all three original kit files byte for
+byte. No external email, real payment, customer acceptance or commercial result
+is claimed. This was a warm owner Mac, not a factory-new environment.
+
+Remote preview failed in the released provider binding: workspace Effect 4.1.4
+and Alchemy's separately resolved 4.1.7 could not share a Redacted value. The
+recipient was stopped rather than assigned SDK debugging. Original source,
+working local service, pending preview and complete native record were retained
+privately in Start's `.local/sdk-connection-001/`. No hosted URL was returned.
+
+Release 0.1.1 fixes the distribution owner: one source-root Effect pin and npm
+override, with a lock check refusing nested runtimes. Independent clean installation
+checks now include an actual cross-Alchemy Redacted roundtrip and module realpath
+identity. The old 0.1.0 archive is unchanged.
+
+A second zero-context Sol low operator received the original request, existing
+business files, candidate starter and a new isolated namespace, without the first
+conversation. It acquired public 0.1.1 and deployed the existing composition to
+an actual Cloudflare Worker and D1. HTTP checks observed four pages, three downloads
+matching original bytes, invalid contact 400, valid fictional contact 200 and
+unauthenticated access 401. Provider-library readback found two marked fictional
+notes, zero subscriptions and zero queued mail. It left usable online records and
+restart instructions. The coordinator independently verified protected access and
+all three hosted download bytes. Hosted browser visual QA was not performed;
+the earlier browser exercise covered the local runtime only. Both native runs and
+first download outputs remain private. No ten-minute, new-owner paid-commerce,
+human acceptance or customer-outcome qualification is inferred from this case.

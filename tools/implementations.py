@@ -17,7 +17,7 @@ CATALOG = Path(__file__).resolve().parents[1] / "implementations.json"
 def admit_manifest(directory):
     try:
         manifest = json.loads((directory / "manifest.json").read_text())
-        if (manifest["schemaVersion"] != 1 or manifest["release"] != "0.1.0"
+        if (manifest["schemaVersion"] != 1 or re.fullmatch(r"\d+\.\d+\.\d+", manifest["release"]) is None
                 or manifest["node"] != {"minimum": "26.13.1", "major": 26}
                 or not isinstance(manifest["files"], list) or not manifest["files"]):
             raise InstallError("unsupported implementation manifest")
